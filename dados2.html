@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dados 2.0</title>
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  background:#f2f5f9;
+  padding:20px;
+}
+.container{
+  max-width:420px;
+  margin:auto;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  margin-bottom:20px;
+}
+h2{
+  margin-top:0;
+  color:#3b82f6;
+}
+label{
+  display:block;
+  margin-top:10px;
+}
+input{
+  width:100%;
+  padding:8px;
+  margin-top:4px;
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#3b82f6;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+    <h2>👥 Quadro de Colaboradores</h2>
+
+    <label>Efetivo</label>
+    <input type="number" id="efetivo">
+
+    <label>Falta</label>
+    <input type="number" id="falta">
+
+    <label>Atestado</label>
+    <input type="number" id="atestado">
+
+    <label>Férias</label>
+    <input type="number" id="ferias">
+  </div>
+
+  <div class="card">
+    <h2>📦 Caixas</h2>
+
+    <label>Caixas Programadas</label>
+    <input type="number" id="prog">
+
+    <label>Caixas Produzidas</label>
+    <input type="number" id="prod">
+  </div>
+
+  <button onclick="salvar()">Salvar e ir para Dashboard</button>
+
+</div>
+
+<script>
+function salvar(){
+  const dados = {
+    efetivo: Number(efetivo.value),
+    falta: Number(falta.value),
+    atestado: Number(atestado.value),
+    ferias: Number(ferias.value),
+    base: 30,
+    programado: Number(prog.value),
+    produzido: Number(prod.value)
+  }
+
+  localStorage.setItem("dadosSistema", JSON.stringify(dados))
+  window.location.href = "dashboard.html"
+}
+</script>
+
+</body>
+</html>
