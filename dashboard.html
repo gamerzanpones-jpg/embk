@@ -77,14 +77,12 @@ button:hover{transform:scale(1.05);}
   box-shadow:0 18px 40px rgba(0,0,0,.15);
 }
 
-.emoji{
-  font-size:34px;
-}
+.emoji{font-size:34px;}
 
 .card span{
   display:block;
   margin-top:10px;
-  font-size:42px;   /* 🔥 NÚMERO GRANDE AQUI */
+  font-size:42px;
   font-weight:800;
   line-height:1;
 }
@@ -92,54 +90,11 @@ button:hover{transform:scale(1.05);}
 .base{
   background:linear-gradient(135deg,#dbeafe,#bfdbfe);
 }
-
 .efetivo{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
 }
-
 .alerta{
   background:linear-gradient(135deg,#fef9c3,#fde68a);
-}
-
-#grafico{
-  display:none;
-  margin-top:40px;
-}
-
-.barras{
-  display:flex;
-  gap:50px;
-  align-items:flex-end;
-  height:260px;
-  margin-top:25px;
-}
-
-.coluna{
-  width:100px;
-  background:#e5e7eb;
-  border-radius:18px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  overflow:hidden;
-}
-
-.coluna div{
-  width:100%;
-  border-radius:18px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  color:#fff;
-  font-weight:800;
-  font-size:22px;
-  padding-bottom:8px;
-  transition:.4s;
-}
-
-.info{
-  margin-top:18px;
-  font-size:18px;
 }
 </style>
 </head>
@@ -189,59 +144,20 @@ button:hover{transform:scale(1.05);}
   </div>
 </div>
 
-<button class="next" onclick="mostrarCaixas()">➡ Próximo</button>
-
-<div id="grafico" class="card-box">
-  <h3>📦 Caixas</h3>
-
-  <div class="barras">
-    <div class="coluna">
-      <div id="barraProg" style="background:var(--azul);height:0%">0</div>
-    </div>
-
-    <div class="coluna">
-      <div id="barraProd" style="background:var(--verde);height:0%">0</div>
-    </div>
-  </div>
-
-  <div class="info">Diferença: <b id="diferenca">0</b></div>
-  <div class="info">Produção: <b id="porcentagem">0%</b></div>
-</div>
+<button class="next" onclick="location.href='dashboard2.html'">
+  ➡ Próximo
+</button>
 
 <script>
 window.onload = function(){
-
   const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
-    efetivo:0,falta:0,atestado:0,ferias:0,programado:0,produzido:0
+    efetivo:0,falta:0,atestado:0,ferias:0
   };
 
   document.getElementById("efetivo").textContent = dados.efetivo;
   document.getElementById("falta").textContent = dados.falta;
   document.getElementById("atestado").textContent = dados.atestado;
   document.getElementById("ferias").textContent = dados.ferias;
-
-  window.mostrarCaixas = function(){
-    document.getElementById("grafico").style.display="block";
-
-    const max = Math.max(dados.programado, dados.produzido, 1);
-
-    const barraProg = document.getElementById("barraProg");
-    const barraProd = document.getElementById("barraProd");
-
-    barraProg.style.height = (dados.programado/max*100)+"%";
-    barraProg.textContent = dados.programado;
-
-    barraProd.style.height = (dados.produzido/max*100)+"%";
-    barraProd.textContent = dados.produzido;
-
-    document.getElementById("diferenca").textContent =
-      dados.produzido - dados.programado;
-
-    document.getElementById("porcentagem").textContent =
-      dados.programado
-        ? ((dados.produzido/dados.programado)*100).toFixed(1)+"%"
-        : "0%";
-  }
 }
 </script>
 
