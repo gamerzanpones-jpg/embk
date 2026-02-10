@@ -1,158 +1,204 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard - Produção</title>
+  <meta charset="UTF-8" />
+  <title>Dashboard Produção - Estilo Avançado</title>
+  
+  <!-- Chart.js + plugin datalabels -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
     body {
       margin: 0;
+      background: #0b1f2d;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #e1e7ee;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
-      background: #f1f1f1;
-      padding: 20px;
     }
 
-    h2 {
+    .container {
+      background: #142b44;
+      border-radius: 12px;
+      padding: 30px;
+      width: 850px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    h1 {
       text-align: center;
-      margin-bottom: 15px;
+      font-weight: 900;
+      font-size: 36px;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
     }
 
-    .box {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-    }
-
-    .card {
-      padding: 15px;
-      border-radius: 6px;
-      background: #1976d2;
-      color: white;
+    /* Caixa PRODUÇÃO FINALIZADA */
+    .status-box {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      border: 2px solid #e1e7ee;
+      border-radius: 12px;
+      padding: 12px 22px;
+      font-weight: 600;
+      font-size: 16px;
       text-align: center;
+      user-select: none;
     }
 
-    .card span {
+    .status-box small {
       display: block;
-      font-size: 22px;
-      font-weight: bold;
-      margin-top: 5px;
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 2px;
+      font-weight: normal;
     }
 
-    .ideal { background: #455a64; }
-    .falta { background: #d32f2f; }
-    .atestado { background: #f57c00; }
-    .ferias { background: #388e3c; }
+    .charts-row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-top: 10px;
+    }
 
+    /* Gráfico de barras */
+    #barChart {
+      flex: 2;
+      max-width: 550px;
+    }
+
+    /* Gráfico donut percentual */
+    #donutChartContainer {
+      flex: 1;
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+
+    #donutChart {
+      width: 180px !important;
+      height: 180px !important;
+    }
+
+    /* Texto percentual dentro do donut */
+    #percentText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 44px;
+      font-weight: 700;
+      color: #1de9b6;
+      user-select: none;
+    }
+
+    /* Legenda custom */
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+      gap: 28px;
+      font-weight: 700;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+    }
+
+    .legend-programado { background: #26c6da; } /* azul claro */
+    .legend-produzido { background: #90caf9; }  /* azul acinzentado */
+    .legend-diferenca { background: #fbc02d; }  /* amarelo */
+
+    /* Resultado texto */
+    .resultado {
+      text-align: center;
+      margin-top: 30px;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fbc02d;
+      user-select: none;
+    }
+
+    /* Botões Voltar e Menu */
     .nav {
-      margin-top: 20px;
+      margin-top: 40px;
       display: flex;
       justify-content: space-between;
     }
 
     button {
-      padding: 10px 18px;
+      background: #26c6da;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
+      padding: 12px 26px;
+      color: #0b1f2d;
+      font-weight: 700;
+      font-size: 16px;
       cursor: pointer;
-      background: #1976d2;
-      color: white;
-      font-size: 14px;
+      transition: background-color 0.25s ease;
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
 
     button:hover {
-      background: #125ea6;
-    }
-
-    .center {
-      justify-content: center;
-    }
-
-    .resultado {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 15px;
-    }
-
-    .positivo { color: green; }
-    .negativo { color: red; }
-
-    .hidden {
-      display: none;
+      background: #00acc1;
+      color: #fff;
     }
   </style>
 </head>
 <body>
 
-  <div class="box">
+  <div class="container">
 
-    <!-- TELA 1 - COLABORADORES -->
-    <div id="tela1">
-      <h2>Colaboradores</h2>
+    <h1>CAIXAS</h1>
 
-      <div class="cards">
-        <div class="card ideal">
-          Ideal
-          <span>30</span>
-        </div>
+    <div class="status-box" id="statusBox">
+      PRODUÇÃO FINALIZADA
+      <small id="horaAtual">--:--</small>
+    </div>
 
-        <div class="card">
-          Efetivo
-          <span id="efetivo">0</span>
-        </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-color legend-programado"></div> PROGRAMADO </div>
+      <div class="legend-item"><div class="legend-color legend-produzido"></div> PRODUZIDO </div>
+      <div class="legend-item"><div class="legend-color legend-diferenca"></div> DIFERENÇA </div>
+    </div>
 
-        <div class="card falta">
-          Faltas
-          <span id="falta">0</span>
-        </div>
+    <div class="charts-row">
+      <canvas id="barChart"></canvas>
 
-        <div class="card atestado">
-          Atestados
-          <span id="atestado">0</span>
-        </div>
-
-        <div class="card ferias">
-          Férias
-          <span id="ferias">0</span>
-        </div>
-      </div>
-
-      <div class="nav center">
-        <button onclick="avancar()">Avançar ▶</button>
+      <div id="donutChartContainer">
+        <canvas id="donutChart"></canvas>
+        <div id="percentText">0%</div>
       </div>
     </div>
 
-    <!-- TELA 2 - PRODUÇÃO -->
-    <div id="tela2" class="hidden">
-      <h2>Produção</h2>
+    <div class="resultado" id="resultado"></div>
 
-      <canvas id="grafico"></canvas>
-
-      <div class="resultado" id="resultado"></div>
-
-      <div class="nav">
-        <button onclick="voltar()">◀ Voltar</button>
-        <button onclick="location.href='menu.html'">Menu</button>
-      </div>
+    <div class="nav">
+      <button onclick="voltar()">◀ Voltar</button>
+      <button onclick="location.href='menu.html'">Menu</button>
     </div>
 
   </div>
 
   <script>
+    // Puxa os dados do localStorage
     const dados = JSON.parse(localStorage.getItem("dadosProducao"));
 
     if (!dados) {
@@ -160,46 +206,131 @@
       window.location.href = "dados.html";
     }
 
-    // Cards
-    efetivo.innerText = dados.efetivo;
-    falta.innerText = dados.falta;
-    atestado.innerText = dados.atestado;
-    ferias.innerText = dados.ferias;
+    // Atualiza o horário atual (hora:minuto)
+    function atualizaHora() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('horaAtual').innerText = `${h}:${m}`;
+    }
+    atualizaHora();
+    // Atualiza hora a cada minuto
+    setInterval(atualizaHora, 60*1000);
 
-    // Navegação
-    function avancar() {
-      document.getElementById("tela1").classList.add("hidden");
-      document.getElementById("tela2").classList.remove("hidden");
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    const ctxDonut = document.getElementById('donutChart').getContext('2d');
+    const percentText = document.getElementById('percentText');
+
+    const programado = dados.programado;
+    const produzido = dados.produzido;
+    const diferenca = produzido - programado;
+
+    // Percentual feito, entre 0 e 100
+    let percentual = 0;
+    if (programado > 0) {
+      percentual = Math.min(100, Math.max(0, (produzido / programado) * 100));
     }
 
-    function voltar() {
-      document.getElementById("tela2").classList.add("hidden");
-      document.getElementById("tela1").classList.remove("hidden");
-    }
-
-    // Cálculos
-    const diferenca = dados.produzido - dados.programado;
-    const percentual = ((dados.produzido / dados.programado) * 100).toFixed(2);
-
-    const resultado = document.getElementById("resultado");
-    resultado.innerText =
-      `Programado: ${dados.programado} | Produzido: ${dados.produzido} | Diferença: ${diferenca} | ${percentual}% do planejado`;
-
-    resultado.className = "resultado " + (diferenca >= 0 ? "positivo" : "negativo");
-
-    // Gráfico
-    new Chart(document.getElementById("grafico"), {
+    // Gráfico barras
+    const barChart = new Chart(ctxBar, {
       type: 'bar',
       data: {
         labels: ['Programado', 'Produzido', 'Diferença'],
         datasets: [{
           label: 'Produção',
-          data: [dados.programado, dados.produzido, diferenca],
-          backgroundColor: ['#1976d2', '#2e7d32', '#f57c00']
+          data: [programado, produzido, diferenca],
+          backgroundColor: ['#26c6da', '#90caf9', '#fbc02d'],
+          borderRadius: 6,
+          borderSkipped: false
         }]
+      },
+      options: {
+        responsive: true,
+        animation: {
+          duration: 800
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true },
+          datalabels: {
+            color: '#fff',
+            anchor: 'end',
+            align: 'start',
+            font: { weight: 'bold', size: 14 },
+            formatter: function(value) {
+              return value.toLocaleString('pt-BR');
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#e1e7ee',
+              font: { size: 14 }
+            },
+            grid: {
+              color: '#16405a'
+            }
+          },
+          x: {
+            ticks: {
+              color: '#e1e7ee',
+              font: { size: 14, weight: 'bold' }
+            },
+            grid: { display: false }
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    // Gráfico donut percentual
+    const donutChart = new Chart(ctxDonut, {
+      type: 'doughnut',
+      data: {
+        labels: ['Feito', 'Faltante'],
+        datasets: [{
+          data: [percentual, 100 - percentual],
+          backgroundColor: ['#1de9b6', '#144d56'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '75%',
+        responsive: true,
+        animation: {
+          animateRotate: true,
+          duration: 1200
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
       }
     });
-  </script>
 
+    // Atualiza o texto percentual animado
+    let currentPercent = 0;
+    const targetPercent = Math.round(percentual);
+    const step = targetPercent > 0 ? Math.max(1, Math.floor(targetPercent / 60)) : 1; // anima em até 60 frames
+
+    function animatePercent() {
+      if(currentPercent < targetPercent) {
+        currentPercent += step;
+        if(currentPercent > targetPercent) currentPercent = targetPercent;
+        percentText.textContent = currentPercent + '%';
+        requestAnimationFrame(animatePercent);
+      } else {
+        percentText.textContent = targetPercent + '%';
+      }
+    }
+    animatePercent();
+
+    // Texto resumo abaixo
+    const resultado = document.getElementById('resultado');
+    resultado.innerText = `Programado: ${programado.toLocaleString('pt-BR')} | Produzido: ${produzido.toLocaleString('pt-BR')} | Diferença: ${diferenca.toLocaleString('pt-BR')} | ${percentual.toFixed(2)}% do planejado`;
+
+  </script>
 </body>
 </html>
