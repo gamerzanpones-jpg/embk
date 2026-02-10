@@ -15,16 +15,13 @@
   --box2:#1e293b;
   --texto:#e5e7eb;
 }
-
 body{
   margin:0;
   font-family:Arial,sans-serif;
   background:linear-gradient(180deg,var(--bg),var(--bg2));
   color:var(--texto);
 }
-
 .hidden{display:none}
-
 .box{
   max-width:900px;
   margin:40px auto;
@@ -34,10 +31,8 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.6);
   text-align:center;
 }
-
-h2{color:var(--azul); margin-bottom:25px;}
-h3{color:var(--rosa); margin-top:30px;}
-
+h2{color:var(--azul);margin-bottom:25px}
+h3{color:var(--rosa);margin-top:30px}
 input,select,button{
   width:80%;
   padding:14px;
@@ -46,29 +41,22 @@ input,select,button{
   border:none;
   font-size:18px;
 }
-
-input,select{
-  background:var(--box2);
-  color:#fff;
-}
-
+input,select{background:var(--box2);color:#fff}
 button{
   background:var(--azul);
   color:#fff;
   font-weight:bold;
   cursor:pointer;
 }
-
 button.voltar{background:#475569}
 button:hover{opacity:.9}
-
 .menu button{display:block;margin:15px auto}
 
-/* TABELAS */
+/* tabelas */
 table{width:100%;border-collapse:collapse;margin-top:15px}
 th,td{border:1px solid #334155;padding:12px;text-align:center}
 
-/* PRESENÇA */
+/* presença */
 .status-btn button{
   width:40px;height:40px;
   background:#020617;
@@ -76,10 +64,12 @@ th,td{border:1px solid #334155;padding:12px;text-align:center}
   border-radius:6px;
 }
 .status-btn button.selected::after{
-  content:'X';font-size:22px;color:#fff;
+  content:'X';
+  font-size:22px;
+  color:#fff;
 }
 
-/* DASHBOARD */
+/* dashboard */
 .dash{display:grid;grid-template-columns:1fr 1fr;gap:25px}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .card{
@@ -92,7 +82,7 @@ th,td{border:1px solid #334155;padding:12px;text-align:center}
 .card.falta{background:#ef4444}
 .card.atestado{background:#a855f7}
 
-/* CALENDÁRIO */
+/* calendário */
 .calendario{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
 .dia{background:#020617;padding:12px;border-radius:10px;cursor:pointer}
 .vermelho{background:#ef4444}
@@ -119,68 +109,248 @@ th,td{border:1px solid #334155;padding:12px;text-align:center}
   <button class="voltar" onclick="mostrar('login')">Sair</button>
 </div>
 
-<!-- FUNÇÕES & HORÁRIOS -->
+<!-- CADASTRO -->
+<div class="box hidden" id="cadastro">
+  <h2>Cadastro</h2>
+  <input id="nome" placeholder="Nome">
+  <select id="funcao">
+    <option value="">Função</option>
+    <option>Produção</option>
+    <option>Operador</option>
+    <option>Coordenador</option>
+    <option>Ultra</option>
+  </select>
+  <select id="horario">
+    <option value="">Horário</option>
+    <option>06:00 - 15:48</option>
+    <option>07:00 - 16:48</option>
+    <option>09:00 - 18:48</option>
+    <option>10:00 - 19:48</option>
+    <option>12:00 - 21:48</option>
+    <option>13:00 - 22:48</option>
+    <option>21:30 - 06:10</option>
+  </select>
+  <button onclick="addFuncionario()">➕ Incluir</button>
+
+  <table>
+    <thead><tr><th>Nome</th><th>Função</th><th>Horário</th><th>❌</th></tr></thead>
+    <tbody id="listaFunc"></tbody>
+  </table>
+
+  <button class="voltar" onclick="mostrar('menu')">Voltar</button>
+</div>
+
+<!-- PRESENÇA -->
+<div class="box hidden" id="presenca">
+  <h2>Presença</h2>
+  <input type="date" id="dataPresenca">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th><th>Função</th>
+        <th>P</th><th>F</th><th>A</th><th>FÉ</th>
+      </tr>
+    </thead>
+    <tbody id="listaPresenca"></tbody>
+  </table>
+
+  <button onclick="saveDia()">💾 Salvar Dia</button>
+  <button class="voltar" onclick="mostrar('menu')">Voltar</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="box hidden" id="dashboard">
+  <h2>📊 Dashboard Diário</h2>
+  <div class="dash">
+    <div class="cards">
+      <div class="card base">Base<span id="cBase">30</span></div>
+      <div class="card efetivo">Efetivo<span id="cEfetivo">0</span></div>
+      <div class="card falta">Falta<span id="cFalta">0</span></div>
+      <div class="card atestado">Atestado<span id="cAtestado">0</span></div>
+    </div>
+    <div>
+      <div id="mesAtual"></div>
+      <div id="calendario" class="calendario"></div>
+    </div>
+  </div>
+  <button class="voltar" onclick="mostrar('menu')">Voltar</button>
+</div>
+
+<!-- FUNÇÕES -->
 <div class="box hidden" id="funcoes">
   <h2>📘 Funções & Horários</h2>
 
   <h3>Funções</h3>
   <table>
     <tr><th>Função</th><th>Descrição</th></tr>
-    <tr><td>Produção</td><td>Responsável pela fabricação, montagem e controle da produção.</td></tr>
-    <tr><td>Operador</td><td>Opera máquinas, linha de produção e equipamentos.</td></tr>
-    <tr><td>Ultra</td><td>Atua no ultracongelamento, armazenagem e controle de câmaras.</td></tr>
-    <tr><td>Coordenador</td><td>Coordena equipes, turnos e metas diárias.</td></tr>
+    <tr><td>Produção</td><td>Produção e montagem.</td></tr>
+    <tr><td>Operador</td><td>Operação de máquinas.</td></tr>
+    <tr><td>Ultra</td><td>Ultracongelamento e câmaras.</td></tr>
+    <tr><td>Coordenador</td><td>Gestão de equipe.</td></tr>
   </table>
 
-  <h3>Horários Cadastrados</h3>
+  <h3>Horários</h3>
   <table>
-    <thead>
-      <tr><th>Horário</th><th>Funcionários</th></tr>
-    </thead>
+    <thead><tr><th>Horário</th><th>Funcionários</th></tr></thead>
     <tbody id="listaHorarios"></tbody>
   </table>
 
   <button class="voltar" onclick="mostrar('menu')">Voltar</button>
 </div>
 
-<!-- (Cadastro, Presença, Dashboard continuam iguais ao seu) -->
-<!-- SCRIPT -->
 <script>
-const getFuncs=()=>JSON.parse(localStorage.getItem('funcionarios')||'[]');
+const BASE_FUNCIONARIOS=30;
+let dataCalendario=new Date();
 
-/* NAVEGAÇÃO */
+/* navegação segura */
 function mostrar(id){
-  ['login','menu','cadastro','presenca','dashboard','funcoes']
-  .forEach(t=>{
+  ['login','menu','cadastro','presenca','dashboard','funcoes'].forEach(t=>{
     const el=document.getElementById(t);
     if(el) el.classList.add('hidden');
   });
-
   const alvo=document.getElementById(id);
   if(alvo) alvo.classList.remove('hidden');
 
+  if(id==='cadastro') renderFuncionarios();
+  if(id==='presenca') renderPresenca();
+  if(id==='dashboard') carregarDashboard();
   if(id==='funcoes') renderFuncoes();
 }
 
-/* LOGIN */
+/* login */
 function login(){
-  if(user.value==='admin' && pass.value==='1234') mostrar('menu');
+  const u=document.getElementById('user');
+  const p=document.getElementById('pass');
+  if(u.value==='admin' && p.value==='1234') mostrar('menu');
   else alert('Login inválido');
 }
 
-/* FUNÇÕES & HORÁRIOS */
+/* funcionários */
+const getFuncs=()=>JSON.parse(localStorage.getItem('funcionarios')||'[]');
+const setFuncs=d=>localStorage.setItem('funcionarios',JSON.stringify(d));
+
+function addFuncionario(){
+  if(!nome.value||!funcao.value||!horario.value) return alert('Preencha tudo');
+  let f=getFuncs();
+  f.push({nome:nome.value,funcao:funcao.value,horario:horario.value});
+  setFuncs(f);
+  nome.value=funcao.value=horario.value='';
+  renderFuncionarios();
+}
+
+function delFunc(i){
+  let f=getFuncs();
+  f.splice(i,1);
+  setFuncs(f);
+  renderFuncionarios();
+}
+
+function renderFuncionarios(){
+  const lista=document.getElementById('listaFunc');
+  if(!lista) return;
+  lista.innerHTML='';
+  getFuncs().forEach((f,i)=>{
+    lista.innerHTML+=`
+      <tr>
+        <td>${f.nome}</td>
+        <td>${f.funcao}</td>
+        <td>${f.horario}</td>
+        <td><button onclick="delFunc(${i})">❌</button></td>
+      </tr>`;
+  });
+}
+
+/* presença + pre-save */
+document.getElementById('dataPresenca').value=new Date().toISOString().split('T')[0];
+
+function renderPresenca(){
+  const lista=document.getElementById('listaPresenca');
+  if(!lista) return;
+
+  const dia=dataPresenca.value;
+  let pre=JSON.parse(localStorage.getItem('presave')||'{}');
+  if(!pre[dia]) pre[dia]={};
+
+  lista.innerHTML='';
+  getFuncs().forEach((f,i)=>{
+    lista.innerHTML+=`
+      <tr>
+        <td>${f.nome}</td>
+        <td>${f.funcao}</td>
+        ${['Presente','Falta','Atestado','Ferias'].map(s=>`
+        <td class="status-btn">
+          <button class="${pre[dia][i]===s?'selected':''}"
+          onclick="marca(${i},'${s}')"></button>
+        </td>`).join('')}
+      </tr>`;
+  });
+}
+
+function marca(i,s){
+  const dia=dataPresenca.value;
+  let pre=JSON.parse(localStorage.getItem('presave')||'{}');
+  if(!pre[dia]) pre[dia]={};
+  pre[dia][i]=pre[dia][i]===s?'':s;
+  localStorage.setItem('presave',JSON.stringify(pre));
+  renderPresenca();
+}
+
+function saveDia(){
+  const dia=dataPresenca.value;
+  let hist=JSON.parse(localStorage.getItem('historico')||'{}');
+  let pre=JSON.parse(localStorage.getItem('presave')||'{}');
+  hist[dia]=pre[dia]||{};
+  localStorage.setItem('historico',JSON.stringify(hist));
+  alert('Dia salvo!');
+}
+
+/* dashboard */
+function carregarDashboard(){
+  gerarCalendario();
+  atualizarCards(new Date().toISOString().split('T')[0]);
+}
+
+function gerarCalendario(){
+  const cal=document.getElementById('calendario');
+  const mes=document.getElementById('mesAtual');
+  if(!cal||!mes) return;
+
+  cal.innerHTML='';
+  let hist=JSON.parse(localStorage.getItem('historico')||'{}');
+  let a=dataCalendario.getFullYear(),m=dataCalendario.getMonth();
+  mes.innerText=dataCalendario.toLocaleString('pt-BR',{month:'long',year:'numeric'});
+
+  for(let d=1;d<=new Date(a,m+1,0).getDate();d++){
+    let ds=`${a}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    let div=document.createElement('div');
+    div.className='dia';
+    div.innerText=d;
+    if(hist[ds]) div.classList.add('vermelho');
+    div.onclick=()=>atualizarCards(ds);
+    cal.appendChild(div);
+  }
+}
+
+function atualizarCards(d){
+  let r=(JSON.parse(localStorage.getItem('historico')||'{}')[d])||{};
+  cBase.innerText=BASE_FUNCIONARIOS;
+  cEfetivo.innerText=Object.values(r).filter(x=>x==='Presente').length;
+  cFalta.innerText=Object.values(r).filter(x=>x==='Falta').length;
+  cAtestado.innerText=Object.values(r).filter(x=>x==='Atestado').length;
+}
+
+/* funções & horários */
 function renderFuncoes(){
   const lista=document.getElementById('listaHorarios');
   if(!lista) return;
-
   let map={};
   getFuncs().forEach(f=>{
     if(!map[f.horario]) map[f.horario]=[];
     map[f.horario].push(f.nome);
   });
-
   lista.innerHTML='';
-  Object.keys(map).sort().forEach(h=>{
+  Object.keys(map).forEach(h=>{
     lista.innerHTML+=`
       <tr>
         <td>${h}</td>
