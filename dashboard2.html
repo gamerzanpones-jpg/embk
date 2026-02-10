@@ -17,7 +17,16 @@ body{
   margin:0;
   font-family:'Segoe UI', Arial, sans-serif;
   background:linear-gradient(180deg,#e0f2fe,#f8fafc);
+}
+
+.container{
+  max-width:1400px;
+  margin:0 auto;
   padding:30px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
 .top{
@@ -67,15 +76,12 @@ button:hover{transform:scale(1.05);}
 .programado{
   background:linear-gradient(135deg,#dbeafe,#bfdbfe);
 }
-
 .produzido{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
 }
-
 .diferenca{
   background:linear-gradient(135deg,#fef9c3,#fde68a);
 }
-
 .porcentagem{
   background:linear-gradient(135deg,#fee2e2,#fecaca);
 }
@@ -102,35 +108,39 @@ button:hover{transform:scale(1.05);}
 
 <body>
 
-<div class="top">
-  <h2>📦 Produção - Caixas</h2>
-  <button onclick="location.href='dashboard.html'">⬅ Voltar</button>
-</div>
+<div class="container">
 
-<div class="cards">
-
-  <div class="card programado">
-    <h2>📋 Programado</h2>
-    <div class="numero" id="programado">0</div>
-    <div class="sub">Meta do dia</div>
+  <div class="top">
+    <h2>📦 Produção - Caixas</h2>
+    <button onclick="location.href='dashboard.html'">⬅ Voltar</button>
   </div>
 
-  <div class="card produzido">
-    <h2>🏭 Produzido</h2>
-    <div class="numero" id="produzido">0</div>
-    <div class="sub">Realizado</div>
-  </div>
+  <div class="cards">
 
-  <div class="card diferenca">
-    <h2>➖ Diferença</h2>
-    <div class="numero" id="diferenca">0</div>
-    <div class="sub">Produzido - Programado</div>
-  </div>
+    <div class="card programado">
+      <h2>📋 Programado</h2>
+      <div class="numero" id="programado">0</div>
+      <div class="sub">Meta do dia</div>
+    </div>
 
-  <div class="card porcentagem">
-    <h2>📈 Produção</h2>
-    <div class="numero" id="porcentagem">0%</div>
-    <div class="sub">Atingimento</div>
+    <div class="card produzido">
+      <h2>🏭 Produzido</h2>
+      <div class="numero" id="produzido">0</div>
+      <div class="sub">Realizado</div>
+    </div>
+
+    <div class="card diferenca">
+      <h2>➖ Diferença</h2>
+      <div class="numero" id="diferenca">0</div>
+      <div class="sub">Produzido - Programado</div>
+    </div>
+
+    <div class="card porcentagem">
+      <h2>📈 Produção</h2>
+      <div class="numero" id="porcentagem">0%</div>
+      <div class="sub">Atingimento</div>
+    </div>
+
   </div>
 
 </div>
