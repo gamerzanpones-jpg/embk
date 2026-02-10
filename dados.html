@@ -1,127 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Inserir Dados - Produção</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 Dados de Produção</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #8360c3, #2ebf91);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .box {
-      background: #fff;
-      padding: 25px;
-      width: 360px;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-      color: #5e35b1;
-    }
-
-    input {
-      width: 100%;
-      padding: 9px;
-      margin: 6px 0;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 11px;
-      margin-top: 8px;
-      border: none;
-      border-radius: 4px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .salvar {
-      background: #5e35b1;
-      color: white;
-    }
-
-    .salvar:hover {
-      background: #4527a0;
-    }
-
-    .voltar {
-      background: #9e9e9e;
-      color: white;
-    }
-
-    .voltar:hover {
-      background: #757575;
-    }
-
-    .msg {
-      text-align: center;
-      font-size: 13px;
-      color: green;
-      display: none;
-      margin-top: 8px;
-    }
-  </style>
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f2f5f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  width:320px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+h2{
+  text-align:center;
+  color:#3b82f6;
+}
+label{
+  display:block;
+  margin-top:10px;
+  font-weight:bold;
+}
+input{
+  width:100%;
+  padding:8px;
+  margin-top:4px;
+}
+button{
+  margin-top:15px;
+  width:100%;
+  padding:10px;
+  background:#3b82f6;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+button:hover{
+  opacity:.9;
+}
+</style>
 </head>
+
 <body>
+<div class="card">
+  <h2>Registrar Produção</h2>
 
-  <div class="box">
-    <h2>Inserir Dados</h2>
+  <label>Data</label>
+  <input type="date" id="data">
 
-    <input type="number" id="efetivo" placeholder="Funcionários Efetivos">
-    <input type="number" id="falta" placeholder="Faltas">
-    <input type="number" id="atestado" placeholder="Atestados">
-    <input type="number" id="ferias" placeholder="Férias">
+  <label>Programado</label>
+  <input type="number" id="programado" value="30">
 
-    <hr>
+  <label>Produzido</label>
+  <input type="number" id="produzido">
 
-    <input type="number" id="programado" placeholder="Produção Programada">
-    <input type="number" id="produzido" placeholder="Produção Realizada">
+  <button onclick="salvar()">Salvar</button>
+</div>
 
-    <button class="salvar" onclick="salvarDados()">
-      Salvar Dados
-    </button>
+<script>
+function salvar(){
+  const data = document.getElementById("data").value
+  const programado = Number(document.getElementById("programado").value)
+  const produzido = Number(document.getElementById("produzido").value)
 
-    <button class="voltar" onclick="location.href='menu.html'">
-      Voltar ao Menu
-    </button>
+  if(!data){
+    alert("Selecione a data")
+    return
+  }
 
-    <div class="msg" id="msg">
-      Dados salvos com sucesso!
-    </div>
-  </div>
+  const dia = new Date(data).getDate()
 
-  <script>
-    function salvarDados() {
-      const dados = {
-        efetivo: Number(document.getElementById("efetivo").value),
-        falta: Number(document.getElementById("falta").value),
-        atestado: Number(document.getElementById("atestado").value),
-        ferias: Number(document.getElementById("ferias").value),
-        programado: Number(document.getElementById("programado").value),
-        produzido: Number(document.getElementById("produzido").value)
-      };
+  const registro = { data, dia, programado, produzido }
 
-      localStorage.setItem("dadosProducao", JSON.stringify(dados));
-      document.getElementById("msg").style.display = "block";
-    }
-  </script>
+  const dados = JSON.parse(localStorage.getItem("dadosProducao")) || []
 
+  dados.push(registro)
+
+  localStorage.setItem("dadosProducao", JSON.stringify(dados))
+
+  alert("Dados salvos com sucesso ✅")
+}
+</script>
 </body>
 </html>
