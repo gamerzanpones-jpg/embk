@@ -105,10 +105,12 @@ h2{font-size:28px;}
 .diferenca{background:#fbc02d;}
 
 .charts-row{display:flex;align-items:center;gap:40px;width:100%;justify-content:flex-start;}
-#barChart{width:570px !important;height:320px !important;}
+#barChart{width:570px !important;height:320px !important;position:relative;}
 #donutChartContainer{position:relative;width:130px;height:130px;}
 #donutChart{width:130px !important;height:130px !important;}
 #percentText{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:700;color:#1de9b6;pointer-events:none;user-select:none;}
+
+/* Números abaixo das barras, centralizados com a barra */
 #barChartValues {
   display:flex;
   justify-content:space-between;
@@ -117,6 +119,7 @@ h2{font-size:28px;}
   color:#e1e7ee;
   font-weight:700;
   font-size:16px;
+  padding: 0 6px; /* para alinhar melhor com borda das barras */
 }
 .nav{margin-top:30px;display:flex;justify-content:space-between;}
 button{
@@ -192,13 +195,13 @@ button:hover{background:#00acc1;color:#fff;}
 </div>
 
 <script>
-const dados=JSON.parse(localStorage.getItem("dadosProducao"));
+const dados = JSON.parse(localStorage.getItem("dadosProducao"));
 if(!dados){alert("Nenhum dado encontrado. Preencha os dados primeiro."); window.location.href="dados.html";}
 
-document.getElementById("cardEfetivo").textContent=dados.efetivo;
-document.getElementById("cardFalta").textContent=dados.falta;
-document.getElementById("cardAtestado").textContent=dados.atestado;
-document.getElementById("cardFerias").textContent=dados.ferias;
+document.getElementById("cardEfetivo").textContent = dados.efetivo;
+document.getElementById("cardFalta").textContent = dados.falta;
+document.getElementById("cardAtestado").textContent = dados.atestado;
+document.getElementById("cardFerias").textContent = dados.ferias;
 
 function avancar(){document.getElementById('tela1').style.display='none'; document.getElementById('tela2').style.display='flex'; atualizarGrafico();}
 function voltar(){document.getElementById('tela2').style.display='none'; document.getElementById('tela1').style.display='flex';}
@@ -206,28 +209,28 @@ function voltar(){document.getElementById('tela2').style.display='none'; documen
 let barChart, donutChart;
 
 function atualizarGrafico(){
-  const ctxBar=document.getElementById('barChart').getContext('2d');
-  const ctxDonut=document.getElementById('donutChart').getContext('2d');
-  const percentText=document.getElementById('percentText');
+  const ctxBar = document.getElementById('barChart').getContext('2d');
+  const ctxDonut = document.getElementById('donutChart').getContext('2d');
+  const percentText = document.getElementById('percentText');
 
-  const programado=dados.programado;
-  const produzido=dados.produzido;
-  const diferenca=Math.abs(produzido-programado);
+  const programado = dados.programado;
+  const produzido = dados.produzido;
+  const diferenca = Math.abs(produzido - programado);
 
-  let percentual=0;
-  if(programado>0) percentual=Math.min(100, Math.max(0,(produzido/programado)*100));
+  let percentual = 0;
+  if(programado>0) percentual = Math.min(100, Math.max(0, (produzido/programado)*100));
 
-  percentText.textContent='0%';
+  percentText.textContent = '0%';
   if(barChart) barChart.destroy();
   if(donutChart) donutChart.destroy();
 
   // --- Gráfico de Barras sem números internos ---
-  barChart=new Chart(ctxBar,{
+  barChart = new Chart(ctxBar, {
     type:'bar',
     data:{
-      labels:['Programado','Produzido','Diferença'],
+      labels:['','',''], // deixamos labels vazias
       datasets:[{
-        data:[programado,produzido,diferenca],
+        data:[programado, produzido, diferenca],
         backgroundColor:['#26c6da','#90caf9','#fbc02d'],
         borderRadius:6,
         borderSkipped:false
@@ -243,7 +246,7 @@ function atualizarGrafico(){
       },
       scales:{
         y:{ beginAtZero:true, ticks:{ color:'#e1e7ee', font:{ size:14 } }, grid:{ color:'#16405a' } },
-        x:{ ticks:{ color:'#e1e7ee', font:{ size:16, weight:'bold' } }, grid:{ display:false } }
+        x:{ ticks:{ display:false }, grid:{ display:false } } // x sem labels
       }
     },
     plugins:[ChartDataLabels]
@@ -255,7 +258,7 @@ function atualizarGrafico(){
   document.getElementById('valDiferenca').textContent = diferenca.toLocaleString('pt-BR');
 
   // --- Gráfico de Rosca ---
-  donutChart=new Chart(ctxDonut,{
+  donutChart = new Chart(ctxDonut,{
     type:'doughnut',
     data:{ labels:['Feito','Faltante'], datasets:[{ data:[percentual,100-percentual], backgroundColor:['#1de9b6','#144d56'], borderWidth:0 }]},
     options:{ cutout:'75%', responsive:true, animation:{ animateRotate:true, duration:1200 }, plugins:{ legend:{ display:false }, tooltip:{ enabled:false } } }
