@@ -50,13 +50,6 @@ h2{font-size:28px;}
   font-size:16px;
   text-align:center;
 }
-.status-box small {
-  display:block;
-  font-size:12px;
-  opacity:0.7;
-  margin-top:2px;
-  font-weight:normal;
-}
 
 /* --- Colaboradores --- */
 #tela1{display:flex;flex-direction:column;gap:24px;}
@@ -156,7 +149,6 @@ button:hover{background:#00acc1;color:#fff;}
 
     <div class="status-box" id="statusBox">
       N/D
-      <small id="horaAtual">--:--</small>
     </div>
 
     <!-- Quadrados coloridos com texto acima do gráfico -->
@@ -194,15 +186,6 @@ document.getElementById("cardFerias").textContent=dados.ferias;
 function avancar(){document.getElementById('tela1').style.display='none'; document.getElementById('tela2').style.display='flex'; atualizarGrafico();}
 function voltar(){document.getElementById('tela2').style.display='none'; document.getElementById('tela1').style.display='flex';}
 
-function atualizaHora(){
-  const now=new Date();
-  const h=String(now.getHours()).padStart(2,'0');
-  const m=String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('horaAtual').innerText=`${h}:${m}`;
-}
-atualizaHora();
-setInterval(atualizaHora,60000);
-
 let barChart, donutChart;
 
 function atualizarGrafico(){
@@ -212,7 +195,7 @@ function atualizarGrafico(){
 
   const programado=dados.programado;
   const produzido=dados.produzido;
-  const diferenca=produzido-programado;
+  const diferenca=Math.abs(produzido-programado);
 
   let percentual=0;
   if(programado>0) percentual=Math.min(100, Math.max(0,(produzido/programado)*100));
