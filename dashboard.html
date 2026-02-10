@@ -2,211 +2,94 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard Produção</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 Dados de Produção</title>
 
 <style>
 body{
-  margin:0;
-  background:#060f1f;
-  font-family:Segoe UI, Tahoma, sans-serif;
+  font-family: Arial, sans-serif;
+  background:#f2f5f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  width:320px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+h2{
+  text-align:center;
+  color:#3b82f6;
+}
+label{
+  display:block;
+  margin-top:10px;
+  font-weight:bold;
+}
+input{
+  width:100%;
+  padding:8px;
+  margin-top:4px;
+}
+button{
+  margin-top:15px;
+  width:100%;
+  padding:10px;
+  background:#3b82f6;
   color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
-.container{
-  width:1180px;
-  background:radial-gradient(circle at top,#0e2444,#050b18);
-  border-radius:26px;
-  padding:34px 44px;
-  box-shadow:0 0 50px rgba(0,0,0,.7);
-  position:relative;
-}
-h1{
-  text-align:center;
-  font-size:64px;
-  letter-spacing:12px;
-  margin:10px 0 22px;
-}
-.status-box{
-  position:absolute;
-  top:36px;
-  right:48px;
-  border:2px solid #fff;
-  padding:16px 28px;
-  border-radius:20px;
-  font-weight:800;
-  text-align:center;
-  line-height:1.3;
-}
-.legend{
-  display:flex;
-  justify-content:center;
-  gap:56px;
-  margin-bottom:24px;
-  font-weight:800;
-  font-size:18px;
-}
-.legend span{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.dot{
-  width:18px;
-  height:18px;
-  border-radius:50%;
-}
-.p{background:#4cc3d9}
-.r{background:#9fbad5}
-.d{background:#ffd83d}
-
-.charts{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-#barBox{
-  width:760px;
-  height:420px;
-}
-#donutBox{
-  width:220px;
-  height:220px;
-  position:relative;
-}
-#percent{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:44px;
-  font-weight:900;
-  color:#1aff1a;
+button:hover{
+  opacity:.9;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="card">
+  <h2>Registrar Produção</h2>
 
-  <h1>CAIXAS</h1>
+  <label>Data</label>
+  <input type="date" id="data">
 
-  <div class="status-box">
-    PRODUÇÃO FINALIZADA<br>
-    <span id="hora">--:--</span>
-  </div>
+  <label>Programado</label>
+  <input type="number" id="programado" value="30">
 
-  <div class="legend">
-    <span><div class="dot p"></div>PROGRAMADO</span>
-    <span><div class="dot r"></div>PRODUZIDO</span>
-    <span><div class="dot d"></div>DIFERENÇA</span>
-  </div>
+  <label>Produzido</label>
+  <input type="number" id="produzido">
 
-  <div class="charts">
-    <div id="barBox">
-      <canvas id="barChart"></canvas>
-    </div>
-
-    <div id="donutBox">
-      <canvas id="donutChart"></canvas>
-      <div id="percent">0%</div>
-    </div>
-  </div>
-
+  <button onclick="salvar()">Salvar</button>
 </div>
 
 <script>
-/* ===== DADOS ===== */
-const dados = JSON.parse(localStorage.getItem("dadosProducao"));
-if(!dados){
-  alert("Sem dados de produção");
-  location.href="dados.html";
-}
+function salvar(){
+  const data = document.getElementById("data").value
+  const programado = Number(document.getElementById("programado").value)
+  const produzido = Number(document.getElementById("produzido").value)
 
-/* ===== HORA ===== */
-document.getElementById("hora").textContent =
-  new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-
-/* ===== LÓGICA DO SLIDE ===== */
-const programado = Number(dados.programado);
-const produzidoReal = Number(dados.produzido);
-
-const produzido = Math.min(produzidoReal, programado);
-const diferenca = Math.max(programado - produzidoReal, 0);
-
-let percentual = programado > 0 ? (produzidoReal / programado) * 100 : 0;
-percentual = Math.max(0, Math.min(100, percentual));
-
-/* ===== BAR CHART ===== */
-new Chart(document.getElementById('barChart'),{
-  type:'bar',
-  data:{
-    labels:['','',''],
-    datasets:[{
-      data:[programado, produzido, diferenca],
-      backgroundColor:['#4cc3d9','#9fbad5','#ffd83d'],
-      borderRadius:26,
-      borderSkipped:false
-    }]
-  },
-  options:{
-    responsive:true,
-    plugins:{
-      legend:{display:false},
-      tooltip:{enabled:false},
-      datalabels:{
-        color:'#ffffff',
-        font:{
-          weight:'900',
-          size:18
-        },
-        anchor:'end',
-        align:'end',
-        offset:10,
-        formatter:value => value.toLocaleString('pt-BR')
-      }
-    },
-    scales:{
-      y:{
-        beginAtZero:true,
-        ticks:{
-          color:'#ffffff',
-          font:{size:14}
-        },
-        grid:{color:'rgba(255,255,255,0.08)'}
-      },
-      x:{
-        ticks:{display:false},
-        grid:{display:false}
-      }
-    }
-  },
-  plugins:[ChartDataLabels]
-});
-
-/* ===== DONUT ===== */
-new Chart(document.getElementById('donutChart'),{
-  type:'doughnut',
-  data:{
-    datasets:[{
-      data:[percentual,100-percentual],
-      backgroundColor:['#1aff1a','#1a2a3a'],
-      borderWidth:0
-    }]
-  },
-  options:{
-    cutout:'78%',
-    plugins:{legend:{display:false},tooltip:{enabled:false}}
+  if(!data){
+    alert("Selecione a data")
+    return
   }
-});
 
-document.getElementById('percent').textContent =
-  Math.round(percentual) + '%';
+  const dia = new Date(data).getDate()
+
+  const registro = { data, dia, programado, produzido }
+
+  const dados = JSON.parse(localStorage.getItem("dadosProducao")) || []
+
+  dados.push(registro)
+
+  localStorage.setItem("dadosProducao", JSON.stringify(dados))
+
+  alert("Dados salvos com sucesso ✅")
+}
 </script>
 </body>
 </html>
