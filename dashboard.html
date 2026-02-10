@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard - Colaboradores</title>
+<title>Dashboard</title>
 
 <style>
 :root{
@@ -50,6 +50,13 @@ button:hover{transform:scale(1.05);}
   color:#fff;
 }
 
+.next{
+  background:var(--azul);
+  color:#fff;
+  margin-top:30px;
+  align-self:flex-end;
+}
+
 .card-box{
   background:#fff;
   padding:25px;
@@ -80,9 +87,7 @@ button:hover{transform:scale(1.05);}
   box-shadow:0 18px 40px rgba(0,0,0,.15);
 }
 
-.emoji{
-  font-size:34px;
-}
+.emoji{font-size:34px;}
 
 .card span{
   display:block;
@@ -95,11 +100,9 @@ button:hover{transform:scale(1.05);}
 .base{
   background:linear-gradient(135deg,#dbeafe,#bfdbfe);
 }
-
 .efetivo{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
 }
-
 .alerta{
   background:linear-gradient(135deg,#fef9c3,#fde68a);
 }
@@ -111,49 +114,66 @@ button:hover{transform:scale(1.05);}
 <div class="container">
 
   <div class="top">
-    <h2>👥 Dashboard - Colaboradores</h2>
-    <button class="menu" onclick="location.href='dashboard.html'">⬅ Voltar</button>
+    <h2>📊 Dashboard</h2>
+    <button class="menu" onclick="location.href='menu.html'">Menu</button>
   </div>
 
   <div class="card-box">
-    <h3>📋 Modelo de Colaboradores</h3>
+    <h3>👥 Quadro de Colaboradores</h3>
 
     <div class="cards">
 
       <div class="card base">
         <div class="emoji">🎯</div>
         Base Ideal
-        <span>0</span>
+        <span>30</span>
       </div>
 
       <div class="card efetivo">
         <div class="emoji">👨‍🏭</div>
         Efetivo
-        <span>0</span>
+        <span id="efetivo">0</span>
       </div>
 
       <div class="card alerta">
         <div class="emoji">❌</div>
         Falta
-        <span>0</span>
+        <span id="falta">0</span>
       </div>
 
       <div class="card alerta">
         <div class="emoji">📝</div>
         Atestado
-        <span>0</span>
+        <span id="atestado">0</span>
       </div>
 
       <div class="card alerta">
         <div class="emoji">🏖️</div>
         Férias
-        <span>0</span>
+        <span id="ferias">0</span>
       </div>
 
     </div>
   </div>
 
+  <button class="next" onclick="location.href='dashboard2.html'">
+    ➡ Próximo
+  </button>
+
 </div>
+
+<script>
+window.onload = function(){
+  const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
+    efetivo:0,falta:0,atestado:0,ferias:0
+  };
+
+  document.getElementById("efetivo").textContent = dados.efetivo;
+  document.getElementById("falta").textContent = dados.falta;
+  document.getElementById("atestado").textContent = dados.atestado;
+  document.getElementById("ferias").textContent = dados.ferias;
+}
+</script>
 
 </body>
 </html>
