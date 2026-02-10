@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍩 Donuts Factory</title>
+
+<style>
+:root{
+  --azul:#3b82f6;
+  --rosa:#ec4899;
+  --bg:#020617;
+  --bg2:#0f172a;
+  --box:#111827;
+  --box2:#1e293b;
+  --texto:#e5e7eb;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--texto);
+}
+
+.hidden{display:none}
+
+.box{
+  max-width:900px;
+  margin:40px auto;
+  background:var(--box);
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  text-align:center;
+}
+
+h2{color:var(--azul); margin-bottom:25px;}
+h3{color:var(--rosa); margin-top:30px;}
+
+input,select,button{
+  width:80%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:12px;
+  border:none;
+  font-size:18px;
+}
+
+input,select{
+  background:var(--box2);
+  color:#fff;
+}
+
+button{
+  background:var(--azul);
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button.voltar{background:#475569}
+button:hover{opacity:.9}
+
+.menu button{display:block;margin:15px auto}
+
+/* TABELAS */
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #334155;padding:12px;text-align:center}
+
+/* PRESENÇA */
+.status-btn button{
+  width:40px;height:40px;
+  background:#020617;
+  border:1px solid #475569;
+  border-radius:6px;
+}
+.status-btn button.selected::after{
+  content:'X';font-size:22px;color:#fff;
+}
+
+/* DASHBOARD */
+.dash{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{
+  padding:30px;border-radius:16px;
+  font-size:22px;font-weight:bold;color:#fff
+}
+.card span{font-size:44px;display:block;margin-top:10px}
+.card.base{background:#ec4899}
+.card.efetivo{background:#3b82f6}
+.card.falta{background:#ef4444}
+.card.atestado{background:#a855f7}
+
+/* CALENDÁRIO */
+.calendario{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.dia{background:#020617;padding:12px;border-radius:10px;cursor:pointer}
+.vermelho{background:#ef4444}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="box" id="login">
+  <h2>🍩 Donuts Factory</h2>
+  <input id="user" placeholder="Usuário">
+  <input id="pass" type="password" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+</div>
+
+<!-- MENU -->
+<div class="box menu hidden" id="menu">
+  <h2>Menu</h2>
+  <button onclick="mostrar('cadastro')">Cadastro</button>
+  <button onclick="mostrar('presenca')">Presença</button>
+  <button onclick="mostrar('dashboard')">Dashboard</button>
+  <button onclick="mostrar('funcoes')">Funções & Horários</button>
+  <button class="voltar" onclick="mostrar('login')">Sair</button>
+</div>
+
+<!-- FUNÇÕES & HORÁRIOS -->
+<div class="box hidden" id="funcoes">
+  <h2>📘 Funções & Horários</h2>
+
+  <h3>Funções</h3>
+  <table>
+    <tr><th>Função</th><th>Descrição</th></tr>
+    <tr><td>Produção</td><td>Responsável pela fabricação, montagem e controle da produção.</td></tr>
+    <tr><td>Operador</td><td>Opera máquinas, linha de produção e equipamentos.</td></tr>
+    <tr><td>Ultra</td><td>Atua no ultracongelamento, armazenagem e controle de câmaras.</td></tr>
+    <tr><td>Coordenador</td><td>Coordena equipes, turnos e metas diárias.</td></tr>
+  </table>
+
+  <h3>Horários Cadastrados</h3>
+  <table>
+    <thead>
+      <tr><th>Horário</th><th>Funcionários</th></tr>
+    </thead>
+    <tbody id="listaHorarios"></tbody>
+  </table>
+
+  <button class="voltar" onclick="mostrar('menu')">Voltar</button>
+</div>
+
+<!-- (Cadastro, Presença, Dashboard continuam iguais ao seu) -->
+<!-- SCRIPT -->
+<script>
+const getFuncs=()=>JSON.parse(localStorage.getItem('funcionarios')||'[]');
+
+/* NAVEGAÇÃO */
+function mostrar(id){
+  ['login','menu','cadastro','presenca','dashboard','funcoes']
+  .forEach(t=>{
+    const el=document.getElementById(t);
+    if(el) el.classList.add('hidden');
+  });
+
+  const alvo=document.getElementById(id);
+  if(alvo) alvo.classList.remove('hidden');
+
+  if(id==='funcoes') renderFuncoes();
+}
+
+/* LOGIN */
+function login(){
+  if(user.value==='admin' && pass.value==='1234') mostrar('menu');
+  else alert('Login inválido');
+}
+
+/* FUNÇÕES & HORÁRIOS */
+function renderFuncoes(){
+  const lista=document.getElementById('listaHorarios');
+  if(!lista) return;
+
+  let map={};
+  getFuncs().forEach(f=>{
+    if(!map[f.horario]) map[f.horario]=[];
+    map[f.horario].push(f.nome);
+  });
+
+  lista.innerHTML='';
+  Object.keys(map).sort().forEach(h=>{
+    lista.innerHTML+=`
+      <tr>
+        <td>${h}</td>
+        <td>${map[h].join(', ')}</td>
+      </tr>`;
+  });
+}
+</script>
+
+</body>
+</html>
