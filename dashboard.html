@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard - Produção</title>
-
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -16,39 +14,36 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #232526, #414345);
+      background: #f1f1f1;
       padding: 20px;
-      color: #333;
     }
 
     h2 {
       text-align: center;
-      color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
-    .dashboard {
+    .box {
       max-width: 900px;
       margin: auto;
       background: #fff;
       padding: 20px;
       border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
-      margin-bottom: 20px;
     }
 
     .card {
       padding: 15px;
       border-radius: 6px;
       background: #1976d2;
-      color: #fff;
+      color: white;
       text-align: center;
-      font-size: 14px;
     }
 
     .card span {
@@ -58,102 +53,101 @@
       margin-top: 5px;
     }
 
-    .ideal {
-      background: #455a64;
+    .ideal { background: #455a64; }
+    .falta { background: #d32f2f; }
+    .atestado { background: #f57c00; }
+    .ferias { background: #388e3c; }
+
+    .nav {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
     }
 
-    .falta {
-      background: #d32f2f;
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #1976d2;
+      color: white;
+      font-size: 14px;
     }
 
-    .atestado {
-      background: #f57c00;
+    button:hover {
+      background: #125ea6;
     }
 
-    .ferias {
-      background: #388e3c;
+    .center {
+      justify-content: center;
     }
 
     .resultado {
       text-align: center;
-      margin: 15px 0;
-      font-size: 16px;
       font-weight: bold;
+      margin-top: 15px;
     }
 
-    .positivo {
-      color: green;
-    }
+    .positivo { color: green; }
+    .negativo { color: red; }
 
-    .negativo {
-      color: red;
-    }
-
-    canvas {
-      max-width: 100%;
-      margin-top: 20px;
-    }
-
-    .voltar {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .voltar button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      background: #1976d2;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .voltar button:hover {
-      background: #125ea6;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h2>Dashboard de Produção</h2>
+  <div class="box">
 
-  <div class="dashboard">
+    <!-- TELA 1 - COLABORADORES -->
+    <div id="tela1">
+      <h2>Colaboradores</h2>
 
-    <div class="cards">
-      <div class="card ideal">
-        Ideal
-        <span>30</span>
+      <div class="cards">
+        <div class="card ideal">
+          Ideal
+          <span>30</span>
+        </div>
+
+        <div class="card">
+          Efetivo
+          <span id="efetivo">0</span>
+        </div>
+
+        <div class="card falta">
+          Faltas
+          <span id="falta">0</span>
+        </div>
+
+        <div class="card atestado">
+          Atestados
+          <span id="atestado">0</span>
+        </div>
+
+        <div class="card ferias">
+          Férias
+          <span id="ferias">0</span>
+        </div>
       </div>
 
-      <div class="card">
-        Efetivo
-        <span id="efetivo">0</span>
-      </div>
-
-      <div class="card falta">
-        Faltas
-        <span id="falta">0</span>
-      </div>
-
-      <div class="card atestado">
-        Atestados
-        <span id="atestado">0</span>
-      </div>
-
-      <div class="card ferias">
-        Férias
-        <span id="ferias">0</span>
+      <div class="nav center">
+        <button onclick="avancar()">Avançar ▶</button>
       </div>
     </div>
 
-    <div class="resultado" id="resultado"></div>
+    <!-- TELA 2 - PRODUÇÃO -->
+    <div id="tela2" class="hidden">
+      <h2>Produção</h2>
 
-    <canvas id="grafico"></canvas>
+      <canvas id="grafico"></canvas>
 
-    <div class="voltar">
-      <button onclick="location.href='menu.html'">
-        Voltar ao Menu
-      </button>
+      <div class="resultado" id="resultado"></div>
+
+      <div class="nav">
+        <button onclick="voltar()">◀ Voltar</button>
+        <button onclick="location.href='menu.html'">Menu</button>
+      </div>
     </div>
 
   </div>
@@ -166,32 +160,43 @@
       window.location.href = "dados.html";
     }
 
-    document.getElementById("efetivo").innerText = dados.efetivo;
-    document.getElementById("falta").innerText = dados.falta;
-    document.getElementById("atestado").innerText = dados.atestado;
-    document.getElementById("ferias").innerText = dados.ferias;
+    // Cards
+    efetivo.innerText = dados.efetivo;
+    falta.innerText = dados.falta;
+    atestado.innerText = dados.atestado;
+    ferias.innerText = dados.ferias;
 
+    // Navegação
+    function avancar() {
+      document.getElementById("tela1").classList.add("hidden");
+      document.getElementById("tela2").classList.remove("hidden");
+    }
+
+    function voltar() {
+      document.getElementById("tela2").classList.add("hidden");
+      document.getElementById("tela1").classList.remove("hidden");
+    }
+
+    // Cálculos
     const diferenca = dados.produzido - dados.programado;
     const percentual = ((dados.produzido / dados.programado) * 100).toFixed(2);
 
     const resultado = document.getElementById("resultado");
     resultado.innerText =
-      `Programado: ${dados.programado} | Produzido: ${dados.produzido} | Diferença: ${diferenca} | Resultado: ${percentual}%`;
+      `Programado: ${dados.programado} | Produzido: ${dados.produzido} | Diferença: ${diferenca} | ${percentual}% do planejado`;
 
     resultado.className = "resultado " + (diferenca >= 0 ? "positivo" : "negativo");
 
+    // Gráfico
     new Chart(document.getElementById("grafico"), {
       type: 'bar',
       data: {
-        labels: ['Programado', 'Produzido'],
+        labels: ['Programado', 'Produzido', 'Diferença'],
         datasets: [{
           label: 'Produção',
-          data: [dados.programado, dados.produzido],
-          backgroundColor: ['#1976d2', '#2e7d32']
+          data: [dados.programado, dados.produzido, diferenca],
+          backgroundColor: ['#1976d2', '#2e7d32', '#f57c00']
         }]
-      },
-      options: {
-        responsive: true
       }
     });
   </script>
