@@ -6,31 +6,23 @@
 <title>Dashboard Produção</title>
 
 <style>
-:root{
-  --azul:#3b82f6;
-  --rosa:#ec4899;
-  --verde:#22c55e;
-  --vermelho:#ef4444;
-  --cinza:#64748b;
-}
-
 body{
-  margin:0;
   font-family:Arial, sans-serif;
   background:#f2f5f9;
   padding:20px;
+  margin:0;
 }
 
 h1{
   text-align:center;
-  color:var(--azul);
-  margin-bottom:20px;
+  color:#3b82f6;
 }
 
 #dashboard{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
   gap:16px;
+  margin-top:20px;
 }
 
 .card{
@@ -44,20 +36,27 @@ h1{
 .dia{
   font-size:26px;
   font-weight:bold;
-  color:var(--rosa);
-  margin-bottom:10px;
+  color:#ec4899;
+  margin-bottom:8px;
 }
 
 .item{
-  margin:6px 0;
   font-size:14px;
-  color:var(--cinza);
+  margin:5px 0;
 }
 
-.ok{ color:var(--verde); font-weight:bold; }
-.fail{ color:var(--vermelho); font-weight:bold; }
+.ok{
+  color:#22c55e;
+  font-weight:bold;
+}
+
+.fail{
+  color:#ef4444;
+  font-weight:bold;
+}
 
 .msg{
+  grid-column:1/-1;
   text-align:center;
   color:#666;
 }
@@ -68,53 +67,51 @@ h1{
 
 <h1>Dashboard de Produção</h1>
 
-<!-- Fallback HTML (SEMPRE APARECE) -->
 <div id="dashboard">
-  <div class="msg">Carregando dados...</div>
+  <div class="msg">Carregando dados…</div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-  let dados = []
+  const container = document.getElementById("dashboard")
+  container.innerHTML = ""
 
+  let dados = []
   try{
     const salvo = localStorage.getItem("dadosProducao")
     if(salvo){
       dados = JSON.parse(salvo)
     }
   }catch(e){
-    console.error("Erro ao ler dados:", e)
+    dados = []
   }
 
-  const dashboard = document.getElementById("dashboard")
-  dashboard.innerHTML = ""
-
-  if(!dados || dados.length === 0){
-    dashboard.innerHTML = "<div class='msg'>Nenhum dado registrado</div>"
+  if(!Array.isArray(dados) || dados.length === 0){
+    container.innerHTML = "<div class='msg'>Nenhum dado registrado</div>"
     return
   }
 
   dados.forEach(function(reg){
-    if(!reg.dia) return
-
-    const programado = Number(reg.programado) || 0
-    const produzido = Number(reg.produzido) || 0
-    const falta = programado - produzido
+    const dia = reg.dia || "-"
+    const base = Number(reg.programado) || 0
+    const prod = Number(reg.produzido) || 0
+    const falta = base - prod
 
     const card = document.createElement("div")
     card.className = "card"
 
     card.innerHTML =
-      "<div class='dia'>" + reg.dia + "</div>" +
-      "<div class='item'>Base: " + programado + "</div>" +
-      "<div class='item ok'>Produzido: " + produzido + "</div>" +
+      "<div class='dia'>" + dia + "</div>" +
+      "<div class='item'>Base: " + base + "</div>" +
+      "<div class='item ok'>Produzido: " + prod + "</div>" +
       "<div class='item " + (falta > 0 ? "fail" : "ok") + "'>" +
         "Falta: " + (falta > 0 ? falta : 0) +
       "</div>"
 
-    dashboard.appendChild(card)
+    container.appendChild(card)
   })
+
 })
 </script>
 
