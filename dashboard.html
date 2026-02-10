@@ -84,6 +84,7 @@
       flex-wrap: wrap;
     }
 
+    /* *** QUADRO DOS COLABORADORES SEM ALTERAÇÃO *** */
     .card {
       flex: 1 1 160px;
       max-width: 180px;
@@ -123,36 +124,48 @@
       position: relative;
     }
 
+    /* LEGENDA AJUSTADA (só quadrados com borda branca, sem texto) */
     .legend {
       display: flex;
-      justify-content: center;
-      gap: 30px;
+      justify-content: flex-end !important;
+      gap: 25px;
       font-weight: 700;
       font-size: 14px;
       user-select: none;
       margin-bottom: 10px;
+      width: 100%;
+      padding-right: 8px;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .legend-color {
-      width: 20px;
-      height: 20px;
-      border-radius: 5px;
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      box-sizing: border-box;
+      cursor: default;
+      border: 2px solid white;
     }
 
     .legend-programado { background: #26c6da; }
     .legend-produzido { background: #90caf9; }
     .legend-diferenca { background: #fbc02d; }
 
+    .legend-item:last-child {
+      margin-left: 35px;
+    }
+
     .charts-row {
       display: flex;
       align-items: center;
       gap: 40px;
+      width: 100%;
+      justify-content: flex-start;
     }
 
     #barChart {
@@ -267,10 +280,17 @@
         <small id="horaAtual">--:--</small>
       </div>
 
+      <!-- Legenda só com quadrados brancos, alinhada à direita -->
       <div class="legend">
-        <div class="legend-item"><div class="legend-color legend-programado"></div> PROGRAMADO </div>
-        <div class="legend-item"><div class="legend-color legend-produzido"></div> PRODUZIDO </div>
-        <div class="legend-item"><div class="legend-color legend-diferenca"></div> DIFERENÇA </div>
+        <div class="legend-item">
+          <div class="legend-color legend-programado"></div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color legend-produzido"></div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color legend-diferenca"></div>
+        </div>
       </div>
 
       <div class="charts-row">
@@ -393,7 +413,12 @@
             x: {
               ticks: {
                 color: '#e1e7ee',
-                font: { size: 14, weight: 'bold' }
+                font: { size: 16, weight: 'bold' },
+                callback: function(value, index) {
+                  // Mostrar valor correspondente abaixo da label
+                  const valores = [programado, produzido, diferenca];
+                  return valores[index].toLocaleString('pt-BR');
+                }
               },
               grid: { display: false }
             }
@@ -441,7 +466,7 @@
       }
       animatePercent();
 
-      // Atualiza texto resumo abaixo do gráfico
+      // Atualiza texto resumo abaixo do gráfico (se quiser remover, pode comentar)
       document.getElementById('resultado').textContent =
         `Programado: ${programado.toLocaleString('pt-BR')} | Produzido: ${produzido.toLocaleString('pt-BR')} | Diferença: ${diferenca.toLocaleString('pt-BR')} | ${percentual.toFixed(2)}% do planejado`;
     }
