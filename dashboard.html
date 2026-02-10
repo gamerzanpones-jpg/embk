@@ -5,10 +5,18 @@
 <title>Dashboard</title>
 
 <style>
+:root{
+  --azul:#3b82f6;
+  --verde:#22c55e;
+  --amarelo:#facc15;
+  --vermelho:#ef4444;
+  --cinza:#64748b;
+}
+
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:#f1f5f9;
+  font-family:'Segoe UI', Arial, sans-serif;
+  background:linear-gradient(180deg,#f1f5f9,#e2e8f0);
   padding:20px;
 }
 
@@ -19,82 +27,115 @@ body{
 }
 
 button{
-  padding:10px 16px;
+  padding:10px 18px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   cursor:pointer;
-  font-weight:bold;
+  font-weight:600;
+  transition:.2s;
 }
 
+button:hover{transform:scale(1.03);}
+
 .menu{
-  background:#64748b;
+  background:var(--cinza);
   color:#fff;
 }
 
 .next{
-  background:#3b82f6;
+  background:var(--azul);
   color:#fff;
-  margin-top:20px;
+  margin-top:25px;
 }
 
 .card-box{
   background:#fff;
-  padding:20px;
-  border-radius:14px;
-  box-shadow:0 10px 25px rgba(0,0,0,.1);
-  margin-top:20px;
+  padding:22px;
+  border-radius:18px;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.7);
+  margin-top:25px;
 }
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:15px;
-  margin-top:15px;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:18px;
+  margin-top:18px;
 }
 
 .card{
-  background:#f8fafc;
-  padding:15px;
-  border-radius:12px;
+  border-radius:16px;
+  padding:18px 15px;
   text-align:center;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.08);
+  transition:.25s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
 }
 
 .card span{
   display:block;
-  font-size:22px;
-  font-weight:bold;
-  margin-top:5px;
+  margin-top:8px;
+  font-size:28px;
+  font-weight:700;
+}
+
+.base{
+  background:linear-gradient(135deg,#dbeafe,#bfdbfe);
+}
+
+.efetivo{
+  background:linear-gradient(135deg,#dcfce7,#bbf7d0);
+}
+
+.alerta{
+  background:linear-gradient(135deg,#fef9c3,#fde68a);
 }
 
 #grafico{
   display:none;
-  margin-top:30px;
+  margin-top:35px;
 }
 
 .barras{
   display:flex;
-  gap:40px;
+  gap:45px;
   align-items:flex-end;
-  height:200px;
+  height:220px;
+  margin-top:20px;
 }
 
 .coluna{
-  width:80px;
+  width:90px;
   background:#e5e7eb;
-  border-radius:10px;
+  border-radius:14px;
   display:flex;
   align-items:flex-end;
   justify-content:center;
+  overflow:hidden;
 }
 
 .coluna div{
   width:100%;
-  border-radius:10px;
+  border-radius:14px;
   display:flex;
   align-items:flex-end;
   justify-content:center;
   color:#fff;
-  font-weight:bold;
+  font-weight:700;
+  padding-bottom:6px;
+  transition:.4s;
+}
+
+.info{
+  margin-top:15px;
+  font-size:16px;
 }
 </style>
 </head>
@@ -110,11 +151,30 @@ button{
   <h3>👥 Quadro de Colaboradores</h3>
 
   <div class="cards">
-    <div class="card">Base Ideal<span>30</span></div>
-    <div class="card">Efetivo<span id="efetivo">0</span></div>
-    <div class="card">Falta<span id="falta">0</span></div>
-    <div class="card">Atestado<span id="atestado">0</span></div>
-    <div class="card">Férias<span id="ferias">0</span></div>
+    <div class="card base">
+      Base Ideal
+      <span>30</span>
+    </div>
+
+    <div class="card efetivo">
+      Efetivo
+      <span id="efetivo">0</span>
+    </div>
+
+    <div class="card alerta">
+      Falta
+      <span id="falta">0</span>
+    </div>
+
+    <div class="card alerta">
+      Atestado
+      <span id="atestado">0</span>
+    </div>
+
+    <div class="card alerta">
+      Férias
+      <span id="ferias">0</span>
+    </div>
   </div>
 </div>
 
@@ -125,15 +185,16 @@ button{
 
   <div class="barras">
     <div class="coluna">
-      <div id="barraProg" style="background:#3b82f6;height:0%">0</div>
+      <div id="barraProg" style="background:var(--azul);height:0%">0</div>
     </div>
+
     <div class="coluna">
-      <div id="barraProd" style="background:#22c55e;height:0%">0</div>
+      <div id="barraProd" style="background:var(--verde);height:0%">0</div>
     </div>
   </div>
 
-  <p>Diferença: <b id="diferenca">0</b></p>
-  <p>Produção: <b id="porcentagem">0%</b></p>
+  <div class="info">Diferença: <b id="diferenca">0</b></div>
+  <div class="info">Produção: <b id="porcentagem">0%</b></div>
 </div>
 
 <script>
@@ -153,16 +214,13 @@ window.onload = function(){
 
     const max = Math.max(dados.programado, dados.produzido, 1);
 
-    const hProg = (dados.programado / max) * 100;
-    const hProd = (dados.produzido / max) * 100;
-
     const barraProg = document.getElementById("barraProg");
     const barraProd = document.getElementById("barraProd");
 
-    barraProg.style.height = hProg + "%";
+    barraProg.style.height = (dados.programado/max*100)+"%";
     barraProg.textContent = dados.programado;
 
-    barraProd.style.height = hProd + "%";
+    barraProd.style.height = (dados.produzido/max*100)+"%";
     barraProd.textContent = dados.produzido;
 
     document.getElementById("diferenca").textContent =
@@ -170,7 +228,7 @@ window.onload = function(){
 
     document.getElementById("porcentagem").textContent =
       dados.programado
-        ? ((dados.produzido / dados.programado) * 100).toFixed(1) + "%"
+        ? ((dados.produzido/dados.programado)*100).toFixed(1)+"%"
         : "0%";
   }
 }
