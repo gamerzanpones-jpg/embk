@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 Dashboard Produção</title>
+<title>Dashboard Produção</title>
 
 <style>
 :root{
@@ -27,14 +27,12 @@ h1{
   margin-bottom:20px;
 }
 
-/* GRID */
-.grid{
+#dashboard{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
   gap:16px;
 }
 
-/* CARD */
 .card{
   background:#fff;
   border-radius:14px;
@@ -43,35 +41,25 @@ h1{
   text-align:center;
 }
 
-/* NUMERO DO DIA */
 .dia{
-  font-size:28px;
+  font-size:26px;
   font-weight:bold;
   color:var(--rosa);
   margin-bottom:10px;
 }
 
-/* ITENS */
 .item{
   margin:6px 0;
   font-size:14px;
   color:var(--cinza);
 }
 
-.ok{
-  color:var(--verde);
-  font-weight:bold;
-}
+.ok{ color:var(--verde); font-weight:bold; }
+.fail{ color:var(--vermelho); font-weight:bold; }
 
-.fail{
-  color:var(--vermelho);
-  font-weight:bold;
-}
-
-@media(max-width:600px){
-  .dia{
-    font-size:24px;
-  }
+.msg{
+  text-align:center;
+  color:#666;
 }
 </style>
 </head>
@@ -80,32 +68,53 @@ h1{
 
 <h1>Dashboard de Produção</h1>
 
-<div class="grid" id="dashboard"></div>
+<!-- Fallback HTML (SEMPRE APARECE) -->
+<div id="dashboard">
+  <div class="msg">Carregando dados...</div>
+</div>
 
 <script>
-const dados = JSON.parse(localStorage.getItem("dadosProducao")) || []
-const dashboard = document.getElementById("dashboard")
+document.addEventListener("DOMContentLoaded", function(){
 
-if(dados.length === 0){
-  dashboard.innerHTML = "<p>Nenhum dado registrado.</p>"
-}
+  let dados = []
 
-dados.forEach(reg => {
-  const falta = reg.programado - reg.produzido
+  try{
+    const salvo = localStorage.getItem("dadosProducao")
+    if(salvo){
+      dados = JSON.parse(salvo)
+    }
+  }catch(e){
+    console.error("Erro ao ler dados:", e)
+  }
 
-  const card = document.createElement("div")
-  card.className = "card"
+  const dashboard = document.getElementById("dashboard")
+  dashboard.innerHTML = ""
 
-  card.innerHTML = `
-    <div class="dia">${reg.dia}</div>
-    <div class="item">Base: ${reg.programado}</div>
-    <div class="item ok">Produzido: ${reg.produzido}</div>
-    <div class="item ${falta > 0 ? 'fail' : 'ok'}">
-      Falta: ${falta > 0 ? falta : 0}
-    </div>
-  `
+  if(!dados || dados.length === 0){
+    dashboard.innerHTML = "<div class='msg'>Nenhum dado registrado</div>"
+    return
+  }
 
-  dashboard.appendChild(card)
+  dados.forEach(function(reg){
+    if(!reg.dia) return
+
+    const programado = Number(reg.programado) || 0
+    const produzido = Number(reg.produzido) || 0
+    const falta = programado - produzido
+
+    const card = document.createElement("div")
+    card.className = "card"
+
+    card.innerHTML =
+      "<div class='dia'>" + reg.dia + "</div>" +
+      "<div class='item'>Base: " + programado + "</div>" +
+      "<div class='item ok'>Produzido: " + produzido + "</div>" +
+      "<div class='item " + (falta > 0 ? "fail" : "ok") + "'>" +
+        "Falta: " + (falta > 0 ? falta : 0) +
+      "</div>"
+
+    dashboard.appendChild(card)
+  })
 })
 </script>
 
