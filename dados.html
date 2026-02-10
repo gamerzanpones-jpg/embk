@@ -3,46 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dados de Produção</title>
+<title>Dados Gerais</title>
 
 <style>
 body{
   font-family:Arial, sans-serif;
   background:#f2f5f9;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
+  padding:20px;
 }
-
 .card{
   background:#fff;
   padding:20px;
   border-radius:12px;
-  width:320px;
+  max-width:400px;
+  margin:auto;
   box-shadow:0 8px 20px rgba(0,0,0,.1);
 }
-
 h2{
-  text-align:center;
   color:#3b82f6;
+  margin-top:0;
 }
-
 label{
   display:block;
   margin-top:10px;
-  font-weight:bold;
 }
-
 input{
   width:100%;
   padding:8px;
-  margin-top:5px;
+  margin-top:4px;
 }
-
 button{
-  margin-top:15px;
+  margin-top:20px;
   width:100%;
   padding:10px;
   background:#3b82f6;
@@ -57,56 +48,47 @@ button{
 <body>
 
 <div class="card">
-  <h2>Registrar Produção</h2>
+  <h2>👥 Quadro de Colaboradores</h2>
 
-  <label>Data</label>
-  <input type="date" id="data">
+  <label>Efetivo</label>
+  <input type="number" id="efetivo">
 
-  <label>Base (Programado)</label>
-  <input type="number" id="programado" value="30">
+  <label>Falta</label>
+  <input type="number" id="falta">
 
-  <label>Produzido</label>
-  <input type="number" id="produzido">
+  <label>Atestado</label>
+  <input type="number" id="atestado">
 
-  <button onclick="salvar()">Salvar</button>
+  <label>Férias</label>
+  <input type="number" id="ferias">
+
+  <h2 style="margin-top:20px;">📦 Produção de Caixas</h2>
+
+  <label>Caixas Programadas</label>
+  <input type="number" id="prog">
+
+  <label>Caixas Produzidas</label>
+  <input type="number" id="prod">
+
+  <button onclick="salvar()">Salvar e ir para Dashboard</button>
 </div>
 
 <script>
 function salvar(){
-  const data = document.getElementById("data").value
-  const programado = Number(document.getElementById("programado").value)
-  const produzido = Number(document.getElementById("produzido").value)
+  const dados = {
+    efetivo: Number(efetivo.value),
+    falta: Number(falta.value),
+    atestado: Number(atestado.value),
+    ferias: Number(ferias.value),
+    baseIdeal: 30,
 
-  if(!data){
-    alert("Selecione a data")
-    return
+    caixasProgramadas: Number(prog.value),
+    caixasProduzidas: Number(prod.value)
   }
 
-  const dia = new Date(data + "T00:00:00").getDate()
+  localStorage.setItem("dadosDashboard", JSON.stringify(dados))
 
-  const registro = {
-    data: data,
-    dia: dia,
-    programado: programado,
-    produzido: produzido
-  }
-
-  let dados = []
-  try{
-    const salvo = localStorage.getItem("dadosProducao")
-    if(salvo){
-      dados = JSON.parse(salvo)
-    }
-  }catch(e){
-    dados = []
-  }
-
-  dados.push(registro)
-
-  localStorage.setItem("dadosProducao", JSON.stringify(dados))
-
-  alert("Dados salvos com sucesso ✅")
-  document.getElementById("produzido").value = ""
+  window.location.href = "dashboard.html"
 }
 </script>
 
