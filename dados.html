@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Inserir Dados - Produção</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #8360c3, #2ebf91);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .box {
+      background: #fff;
+      padding: 25px;
+      width: 360px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #5e35b1;
+    }
+
+    input {
+      width: 100%;
+      padding: 9px;
+      margin: 6px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 11px;
+      margin-top: 10px;
+      background: #5e35b1;
+      border: none;
+      color: white;
+      font-size: 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4527a0;
+    }
+
+    .msg {
+      text-align: center;
+      font-size: 13px;
+      color: green;
+      display: none;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Inserir Dados</h2>
+
+    <input type="number" id="efetivo" placeholder="Funcionários Efetivos">
+    <input type="number" id="falta" placeholder="Faltas">
+    <input type="number" id="atestado" placeholder="Atestados">
+    <input type="number" id="ferias" placeholder="Férias">
+
+    <hr>
+
+    <input type="number" id="programado" placeholder="Produção Programada">
+    <input type="number" id="produzido" placeholder="Produção Realizada">
+
+    <button onclick="salvarDados()">Salvar Dados</button>
+
+    <div class="msg" id="msg">
+      Dados salvos com sucesso!
+    </div>
+  </div>
+
+  <script>
+    function salvarDados() {
+      const dados = {
+        efetivo: Number(document.getElementById("efetivo").value),
+        falta: Number(document.getElementById("falta").value),
+        atestado: Number(document.getElementById("atestado").value),
+        ferias: Number(document.getElementById("ferias").value),
+        programado: Number(document.getElementById("programado").value),
+        produzido: Number(document.getElementById("produzido").value)
+      };
+
+      localStorage.setItem("dadosProducao", JSON.stringify(dados));
+      document.getElementById("msg").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
