@@ -204,6 +204,7 @@ function atualizarGrafico(){
   if(barChart) barChart.destroy();
   if(donutChart) donutChart.destroy();
 
+  // --- Gráfico de Barras sem números ---
   barChart=new Chart(ctxBar,{
     type:'bar',
     data:{
@@ -218,20 +219,20 @@ function atualizarGrafico(){
     options:{
       responsive:true,
       animation:{ duration:800 },
-      plugins:{ legend:{ display:false }, tooltip:{ enabled:true }, datalabels:{
-        color:'#fff', anchor:'end', align:'start', font:{ weight:'bold', size:14 },
-        formatter:function(value){ return value.toLocaleString('pt-BR'); }
-      }},
+      plugins:{ 
+        legend:{ display:false }, 
+        tooltip:{ enabled:true }, 
+        datalabels:{ display:false } // <-- números desativados
+      },
       scales:{
         y:{ beginAtZero:true, ticks:{ color:'#e1e7ee', font:{ size:14 } }, grid:{ color:'#16405a' } },
-        x:{ ticks:{ color:'#e1e7ee', font:{ size:16, weight:'bold' },
-          callback:function(v,i){ return [programado,produzido,diferenca][i].toLocaleString('pt-BR'); }
-        }, grid:{ display:false } }
+        x:{ ticks:{ color:'#e1e7ee', font:{ size:16, weight:'bold' } }, grid:{ display:false } }
       }
     },
     plugins:[ChartDataLabels]
   });
 
+  // --- Gráfico de Rosca ---
   donutChart=new Chart(ctxDonut,{
     type:'doughnut',
     data:{ labels:['Feito','Faltante'], datasets:[{ data:[percentual,100-percentual], backgroundColor:['#1de9b6','#144d56'], borderWidth:0 }]},
@@ -241,7 +242,16 @@ function atualizarGrafico(){
   let currentPercent=0;
   const targetPercent=Math.round(percentual);
   const step=targetPercent>0?Math.max(1,Math.floor(targetPercent/60)):1;
-  function animatePercent(){ if(currentPercent<targetPercent){ currentPercent+=step; if(currentPercent>targetPercent) currentPercent=targetPercent; percentText.textContent=currentPercent+'%'; requestAnimationFrame(animatePercent);}else{ percentText.textContent=targetPercent+'%';} }
+  function animatePercent(){ 
+    if(currentPercent<targetPercent){ 
+      currentPercent+=step; 
+      if(currentPercent>targetPercent) currentPercent=targetPercent; 
+      percentText.textContent=currentPercent+'%'; 
+      requestAnimationFrame(animatePercent);
+    }else{ 
+      percentText.textContent=targetPercent+'%';
+    } 
+  }
   animatePercent();
 }
 
