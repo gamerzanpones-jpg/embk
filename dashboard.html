@@ -1,157 +1,134 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dashboard Produção - Sequencial Moderno</title>
+<meta charset="UTF-8" />
+<title>Dashboard Produção - Sequencial Moderno</title>
 
-  <!-- Chart.js + plugin datalabels -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      background: #0b1f2d;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #e1e7ee;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+<style>
+body {
+  margin:0;
+  background:#0b1f2d;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:#e1e7ee;
+  padding:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+.container {
+  background:#142b44;
+  border-radius:12px;
+  padding:30px;
+  width:900px;
+  box-shadow:0 0 30px rgba(0,0,0,0.5);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  user-select:none;
+}
+h1,h2 {
+  text-align:center;
+  font-weight:900;
+  letter-spacing:4px;
+  margin:0 0 20px 0;
+}
+h1{font-size:36px;}
+h2{font-size:28px;}
+.status-box {
+  position:absolute;
+  top:30px;
+  right:30px;
+  border:2px solid #e1e7ee;
+  border-radius:12px;
+  padding:12px 22px;
+  font-weight:600;
+  font-size:16px;
+  text-align:center;
+}
+.status-box small {
+  display:block;
+  font-size:12px;
+  opacity:0.7;
+  margin-top:2px;
+  font-weight:normal;
+}
+/* --- Colaboradores --- */
+#tela1{display:flex;flex-direction:column;gap:24px;}
+.cards{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.card{
+  flex:1 1 160px;
+  max-width:180px;
+  border-radius:10px;
+  padding:24px 15px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  color:white;
+  transition:background-color 0.3s ease;
+  cursor:default;
+  font-weight:700;
+  font-size:18px;
+  font-family:'Segoe UI Black','Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+.card span{display:block;font-size:42px;font-weight:900;margin-top:10px;}
+.ideal{background:#455a64;}
+.falta{background:#d32f2f;}
+.atestado{background:#f57c00;}
+.ferias{background:#388e3c;}
+.card:not(.ideal):not(.falta):not(.atestado):not(.ferias){background:#1976d2;}
+.card:hover{filter:brightness(85%);}
 
-    .container {
-      background: #142b44;
-      border-radius: 12px;
-      padding: 30px;
-      width: 900px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      user-select: none;
-    }
+/* --- Produção --- */
+#tela2{display:none;flex-direction:column;gap:20px;align-items:center;position:relative;}
+.charts-row{display:flex;align-items:center;gap:40px;width:100%;justify-content:flex-start;}
+#barChart{width:570px !important;height:320px !important;}
+#donutChartContainer{position:relative;width:130px;height:130px;}
+#donutChart{width:130px !important;height:130px !important;}
+#percentText{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:700;color:#1de9b6;pointer-events:none;user-select:none;}
+.nav{margin-top:30px;display:flex;justify-content:space-between;}
+button{
+  background:#26c6da;
+  border:none;
+  border-radius:6px;
+  padding:12px 28px;
+  color:#0b1f2d;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+  transition:background-color 0.25s ease;
+  box-shadow:0 3px 8px rgba(0,0,0,0.2);
+}
+button:hover{background:#00acc1;color:#fff;}
 
-    h1, h2 {
-      text-align: center;
-      font-weight: 900;
-      letter-spacing: 4px;
-      margin: 0 0 20px 0;
-    }
-
-    h1 { font-size: 36px; }
-    h2 { font-size: 28px; }
-
-    .status-box {
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      border: 2px solid #e1e7ee;
-      border-radius: 12px;
-      padding: 12px 22px;
-      font-weight: 600;
-      font-size: 16px;
-      text-align: center;
-    }
-
-    .status-box small {
-      display: block;
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 2px;
-      font-weight: normal;
-    }
-
-    /* --- Colaboradores --- */
-    #tela1 { display: flex; flex-direction: column; gap: 24px; }
-
-    .cards { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-
-    .card {
-      flex: 1 1 160px;
-      max-width: 180px;
-      border-radius: 10px;
-      padding: 24px 15px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      color: white;
-      transition: background-color 0.3s ease;
-      cursor: default;
-      font-weight: 700;
-      font-size: 18px;
-      font-family: 'Segoe UI Black', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .card span {
-      display: block;
-      font-size: 42px;
-      font-weight: 900;
-      margin-top: 10px;
-    }
-
-    .ideal { background: #455a64; }
-    .falta { background: #d32f2f; }
-    .atestado { background: #f57c00; }
-    .ferias { background: #388e3c; }
-    .card:not(.ideal):not(.falta):not(.atestado):not(.ferias) { background: #1976d2; }
-    .card:hover { filter: brightness(85%); }
-
-    /* --- Produção --- */
-    #tela2 { display: none; flex-direction: column; gap: 20px; align-items: center; position: relative; }
-
-    .legend {
-      display: flex;
-      justify-content: flex-end !important;
-      gap: 25px;
-      margin-bottom: 10px;
-      width: 100%;
-      padding-right: 8px;
-      user-select: none;
-    }
-
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .legend-color { width: 26px; height: 26px; border-radius: 4px; border: 2px solid white; }
-    .legend-programado { background: #26c6da; }
-    .legend-produzido { background: #90caf9; }
-    .legend-diferenca { background: #fbc02d; }
-
-    .charts-row { display: flex; align-items: center; gap: 40px; width: 100%; justify-content: flex-start; }
-
-    #barChart { width: 570px !important; height: 320px !important; }
-
-    #donutChartContainer { position: relative; width: 130px; height: 130px; }
-    #donutChart { width: 130px !important; height: 130px !important; }
-    #percentText {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 28px;
-      font-weight: 700;
-      color: #1de9b6;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .nav { margin-top: 30px; display: flex; justify-content: space-between; }
-
-    button {
-      background: #26c6da;
-      border: none;
-      border-radius: 6px;
-      padding: 12px 28px;
-      color: #0b1f2d;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.25s ease;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    }
-
-    button:hover { background: #00acc1; color: #fff; }
-  </style>
+/* --- Quadrados coloridos com texto acima do gráfico --- */
+.color-key {
+  display:flex;
+  justify-content:flex-start;
+  gap:30px;
+  width:100%;
+  margin-bottom:8px;
+}
+.color-item {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+  font-size:14px;
+}
+.color-square {
+  width:20px;
+  height:20px;
+  border-radius:4px;
+  border:2px solid white;
+}
+.programado{background:#26c6da;}
+.produzido{background:#90caf9;}
+.diferenca{background:#fbc02d;}
+</style>
 </head>
 <body>
 <div class="container">
@@ -166,7 +143,7 @@
       <div class="card atestado">Atestados<span id="cardAtestado">0</span></div>
       <div class="card ferias">Férias<span id="cardFerias">0</span></div>
     </div>
-    <div class="nav" style="justify-content: center; margin-top: 24px;">
+    <div class="nav" style="justify-content:center;margin-top:24px;">
       <button onclick="avancar()">Avançar ▶</button>
     </div>
   </div>
@@ -180,10 +157,11 @@
       <small id="horaAtual">--:--</small>
     </div>
 
-    <div class="legend">
-      <div class="legend-item"><div class="legend-color legend-programado"></div></div>
-      <div class="legend-item"><div class="legend-color legend-produzido"></div></div>
-      <div class="legend-item"><div class="legend-color legend-diferenca"></div></div>
+    <!-- Quadrados coloridos com texto acima do gráfico -->
+    <div class="color-key">
+      <div class="color-item"><div class="color-square programado"></div>Programado</div>
+      <div class="color-item"><div class="color-square produzido"></div>Produzido</div>
+      <div class="color-item"><div class="color-square diferenca"></div>Diferença</div>
     </div>
 
     <div class="charts-row">
@@ -203,26 +181,18 @@
 </div>
 
 <script>
-const dados = JSON.parse(localStorage.getItem("dadosProducao"));
-if (!dados) { alert("Nenhum dado encontrado. Preencha os dados primeiro."); window.location.href = "dados.html"; }
+const dados=JSON.parse(localStorage.getItem("dadosProducao"));
+if(!dados){alert("Nenhum dado encontrado. Preencha os dados primeiro."); window.location.href="dados.html";}
 
-document.getElementById("cardEfetivo").textContent = dados.efetivo;
-document.getElementById("cardFalta").textContent = dados.falta;
-document.getElementById("cardAtestado").textContent = dados.atestado;
-document.getElementById("cardFerias").textContent = dados.ferias;
+document.getElementById("cardEfetivo").textContent=dados.efetivo;
+document.getElementById("cardFalta").textContent=dados.falta;
+document.getElementById("cardAtestado").textContent=dados.atestado;
+document.getElementById("cardFerias").textContent=dados.ferias;
 
-function avancar() {
-  document.getElementById('tela1').style.display='none';
-  document.getElementById('tela2').style.display='flex';
-  atualizarGrafico();
-}
+function avancar(){document.getElementById('tela1').style.display='none'; document.getElementById('tela2').style.display='flex'; atualizarGrafico();}
+function voltar(){document.getElementById('tela2').style.display='none'; document.getElementById('tela1').style.display='flex';}
 
-function voltar() {
-  document.getElementById('tela2').style.display='none';
-  document.getElementById('tela1').style.display='flex';
-}
-
-function atualizaHora() {
+function atualizaHora(){
   const now=new Date();
   const h=String(now.getHours()).padStart(2,'0');
   const m=String(now.getMinutes()).padStart(2,'0');
@@ -233,7 +203,7 @@ setInterval(atualizaHora,60000);
 
 let barChart, donutChart;
 
-function atualizarGrafico() {
+function atualizarGrafico(){
   const ctxBar=document.getElementById('barChart').getContext('2d');
   const ctxDonut=document.getElementById('donutChart').getContext('2d');
   const percentText=document.getElementById('percentText');
@@ -254,7 +224,7 @@ function atualizarGrafico() {
     data:{
       labels:['Programado','Produzido','Diferença'],
       datasets:[{
-        data:[programado, produzido, diferenca],
+        data:[programado,produzido,diferenca],
         backgroundColor:['#26c6da','#90caf9','#fbc02d'],
         borderRadius:6,
         borderSkipped:false
