@@ -9,7 +9,6 @@
   --azul:#3b82f6;
   --verde:#22c55e;
   --amarelo:#facc15;
-  --vermelho:#ef4444;
   --cinza:#64748b;
 }
 
@@ -69,8 +68,7 @@ button:hover{transform:scale(1.03);}
   border-radius:16px;
   padding:18px 15px;
   text-align:center;
-  box-shadow:
-    0 8px 18px rgba(0,0,0,.08);
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
   transition:.25s;
 }
 
@@ -79,10 +77,14 @@ button:hover{transform:scale(1.03);}
   box-shadow:0 14px 30px rgba(0,0,0,.12);
 }
 
+.emoji{
+  font-size:28px;
+}
+
 .card span{
   display:block;
-  margin-top:8px;
-  font-size:28px;
+  margin-top:6px;
+  font-size:26px;
   font-weight:700;
 }
 
@@ -151,30 +153,37 @@ button:hover{transform:scale(1.03);}
   <h3>👥 Quadro de Colaboradores</h3>
 
   <div class="cards">
+
     <div class="card base">
+      <div class="emoji">🎯</div>
       Base Ideal
       <span>30</span>
     </div>
 
     <div class="card efetivo">
+      <div class="emoji">👨‍🏭</div>
       Efetivo
       <span id="efetivo">0</span>
     </div>
 
     <div class="card alerta">
+      <div class="emoji">❌</div>
       Falta
       <span id="falta">0</span>
     </div>
 
     <div class="card alerta">
+      <div class="emoji">📝</div>
       Atestado
       <span id="atestado">0</span>
     </div>
 
     <div class="card alerta">
+      <div class="emoji">🏖️</div>
       Férias
       <span id="ferias">0</span>
     </div>
+
   </div>
 </div>
 
