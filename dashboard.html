@@ -170,7 +170,7 @@ button:hover{background:#00acc1;color:#fff;}
     <div class="charts-row">
       <div>
         <canvas id="barChart"></canvas>
-        <!-- Números abaixo do gráfico -->
+        <!-- Números das caixas abaixo das barras -->
         <div id="barChartValues">
           <span id="valProgramado">0</span>
           <span id="valProduzido">0</span>
@@ -221,7 +221,7 @@ function atualizarGrafico(){
   if(barChart) barChart.destroy();
   if(donutChart) donutChart.destroy();
 
-  // --- Gráfico de Barras sem números dentro ---
+  // --- Gráfico de Barras sem números internos ---
   barChart=new Chart(ctxBar,{
     type:'bar',
     data:{
@@ -249,7 +249,7 @@ function atualizarGrafico(){
     plugins:[ChartDataLabels]
   });
 
-  // --- Atualizar números abaixo do gráfico ---
+  // --- Atualizar apenas os números das caixas abaixo das barras ---
   document.getElementById('valProgramado').textContent = programado.toLocaleString('pt-BR');
   document.getElementById('valProduzido').textContent = produzido.toLocaleString('pt-BR');
   document.getElementById('valDiferenca').textContent = diferenca.toLocaleString('pt-BR');
