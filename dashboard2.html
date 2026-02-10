@@ -8,6 +8,8 @@
 :root{
   --azul:#3b82f6;
   --verde:#22c55e;
+  --amarelo:#facc15;
+  --vermelho:#ef4444;
   --cinza:#64748b;
 }
 
@@ -22,7 +24,7 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:25px;
+  margin-bottom:30px;
 }
 
 button{
@@ -36,23 +38,21 @@ button{
   transition:.2s;
 }
 
-button:hover{
-  transform:scale(1.05);
-}
+button:hover{transform:scale(1.05);}
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:30px;
 }
 
 .card{
-  padding:30px;
-  border-radius:26px;
-  box-shadow:
-    0 25px 50px rgba(0,0,0,.15),
-    inset 0 1px 0 rgba(255,255,255,.7);
+  padding:32px;
+  border-radius:28px;
   text-align:center;
+  box-shadow:
+    0 25px 55px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.7);
   position:relative;
   overflow:hidden;
 }
@@ -72,68 +72,30 @@ button:hover{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
 }
 
+.diferenca{
+  background:linear-gradient(135deg,#fef9c3,#fde68a);
+}
+
+.porcentagem{
+  background:linear-gradient(135deg,#fee2e2,#fecaca);
+}
+
 .card h2{
   margin:0;
-  font-size:28px;
+  font-size:26px;
   font-weight:700;
 }
 
 .numero{
-  font-size:90px;
+  font-size:86px;
   font-weight:900;
-  margin:20px 0;
+  margin:22px 0;
   line-height:1;
 }
 
 .sub{
   font-size:18px;
   opacity:.8;
-}
-
-.grafico-box{
-  background:#fff;
-  padding:30px;
-  border-radius:26px;
-  box-shadow:0 20px 45px rgba(0,0,0,.15);
-  margin-top:35px;
-}
-
-.barras{
-  display:flex;
-  justify-content:center;
-  gap:70px;
-  align-items:flex-end;
-  height:260px;
-  margin-top:30px;
-}
-
-.coluna{
-  width:120px;
-  background:#e5e7eb;
-  border-radius:22px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  overflow:hidden;
-}
-
-.coluna div{
-  width:100%;
-  border-radius:22px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  color:#fff;
-  font-weight:800;
-  font-size:26px;
-  padding-bottom:10px;
-  transition:.4s;
-}
-
-.info{
-  margin-top:20px;
-  font-size:22px;
-  text-align:center;
 }
 </style>
 </head>
@@ -159,54 +121,38 @@ button:hover{
     <div class="sub">Realizado</div>
   </div>
 
-</div>
-
-<div class="grafico-box">
-  <h3>📊 Comparativo</h3>
-
-  <div class="barras">
-    <div class="coluna">
-      <div id="barraProg" style="background:var(--azul);height:0%">0</div>
-    </div>
-
-    <div class="coluna">
-      <div id="barraProd" style="background:var(--verde);height:0%">0</div>
-    </div>
+  <div class="card diferenca">
+    <h2>➖ Diferença</h2>
+    <div class="numero" id="diferenca">0</div>
+    <div class="sub">Produzido - Programado</div>
   </div>
 
-  <div class="info">
-    Diferença: <b id="diferenca">0</b> |
-    Produção: <b id="porcentagem">0%</b>
+  <div class="card porcentagem">
+    <h2>📈 Produção</h2>
+    <div class="numero" id="porcentagem">0%</div>
+    <div class="sub">Atingimento</div>
   </div>
+
 </div>
 
 <script>
 window.onload = function(){
   const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
-    programado:0, produzido:0
+    programado:0,
+    produzido:0
   };
 
-  document.getElementById("programado").textContent = dados.programado;
-  document.getElementById("produzido").textContent = dados.produzido;
+  const programado = dados.programado;
+  const produzido  = dados.produzido;
+  const diferenca  = produzido - programado;
+  const porcentagem = programado
+    ? ((produzido / programado) * 100).toFixed(1) + "%"
+    : "0%";
 
-  const max = Math.max(dados.programado, dados.produzido, 1);
-
-  const barraProg = document.getElementById("barraProg");
-  const barraProd = document.getElementById("barraProd");
-
-  barraProg.style.height = (dados.programado/max*100)+"%";
-  barraProg.textContent = dados.programado;
-
-  barraProd.style.height = (dados.produzido/max*100)+"%";
-  barraProd.textContent = dados.produzido;
-
-  document.getElementById("diferenca").textContent =
-    dados.produzido - dados.programado;
-
-  document.getElementById("porcentagem").textContent =
-    dados.programado
-      ? ((dados.produzido/dados.programado)*100).toFixed(1)+"%"
-      : "0%";
+  document.getElementById("programado").textContent = programado;
+  document.getElementById("produzido").textContent  = produzido;
+  document.getElementById("diferenca").textContent  = diferenca;
+  document.getElementById("porcentagem").textContent = porcentagem;
 }
 </script>
 
