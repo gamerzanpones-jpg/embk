@@ -41,15 +41,9 @@
       margin: 0 0 20px 0;
     }
 
-    h1 {
-      font-size: 36px;
-    }
+    h1 { font-size: 36px; }
+    h2 { font-size: 28px; }
 
-    h2 {
-      font-size: 28px;
-    }
-
-    /* Caixa PRODUÇÃO FINALIZADA */
     .status-box {
       position: absolute;
       top: 30px;
@@ -70,25 +64,14 @@
       font-weight: normal;
     }
 
-    /* --- TELA 1: Colaboradores --- */
-    #tela1 {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
+    /* --- Colaboradores --- */
+    #tela1 { display: flex; flex-direction: column; gap: 24px; }
 
-    .cards {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
+    .cards { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
 
-    /* *** QUADRO DOS COLABORADORES SEM ALTERAÇÃO *** */
     .card {
       flex: 1 1 160px;
       max-width: 180px;
-      background: #1976d2;
       border-radius: 10px;
       padding: 24px 15px;
       text-align: center;
@@ -96,10 +79,9 @@
       color: white;
       transition: background-color 0.3s ease;
       cursor: default;
-    }
-
-    .card:hover {
-      background: #145a9a;
+      font-weight: 700;
+      font-size: 18px;
+      font-family: 'Segoe UI Black', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .card span {
@@ -107,84 +89,40 @@
       font-size: 42px;
       font-weight: 900;
       margin-top: 10px;
-      font-family: 'Segoe UI Black', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .ideal { background: #455a64; }
     .falta { background: #d32f2f; }
     .atestado { background: #f57c00; }
     .ferias { background: #388e3c; }
+    .card:not(.ideal):not(.falta):not(.atestado):not(.ferias) { background: #1976d2; }
+    .card:hover { filter: brightness(85%); }
 
-    /* --- TELA 2: Produção --- */
-    #tela2 {
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      position: relative;
-    }
+    /* --- Produção --- */
+    #tela2 { display: none; flex-direction: column; gap: 20px; align-items: center; position: relative; }
 
-    /* LEGENDA AJUSTADA (só quadrados com borda branca, sem texto) */
     .legend {
       display: flex;
       justify-content: flex-end !important;
       gap: 25px;
-      font-weight: 700;
-      font-size: 14px;
-      user-select: none;
       margin-bottom: 10px;
       width: 100%;
       padding-right: 8px;
+      user-select: none;
     }
 
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .legend-color {
-      width: 26px;
-      height: 26px;
-      border-radius: 4px;
-      box-sizing: border-box;
-      cursor: default;
-      border: 2px solid white;
-    }
-
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-color { width: 26px; height: 26px; border-radius: 4px; border: 2px solid white; }
     .legend-programado { background: #26c6da; }
     .legend-produzido { background: #90caf9; }
     .legend-diferenca { background: #fbc02d; }
 
-    .legend-item:last-child {
-      margin-left: 35px;
-    }
+    .charts-row { display: flex; align-items: center; gap: 40px; width: 100%; justify-content: flex-start; }
 
-    .charts-row {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      width: 100%;
-      justify-content: flex-start;
-    }
+    #barChart { width: 570px !important; height: 320px !important; }
 
-    #barChart {
-      width: 570px !important;
-      height: 320px !important;
-    }
-
-    #donutChartContainer {
-      position: relative;
-      width: 130px;
-      height: 130px;
-      user-select: none;
-    }
-
-    #donutChart {
-      width: 130px !important;
-      height: 130px !important;
-    }
-
+    #donutChartContainer { position: relative; width: 130px; height: 130px; }
+    #donutChart { width: 130px !important; height: 130px !important; }
     #percentText {
       position: absolute;
       top: 50%;
@@ -197,20 +135,7 @@
       user-select: none;
     }
 
-    .resultado {
-      text-align: center;
-      font-weight: 700;
-      font-size: 18px;
-      color: #fbc02d;
-      user-select: none;
-      margin-top: 10px;
-    }
-
-    .nav {
-      margin-top: 30px;
-      display: flex;
-      justify-content: space-between;
-    }
+    .nav { margin-top: 30px; display: flex; justify-content: space-between; }
 
     button {
       background: #26c6da;
@@ -222,259 +147,151 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.25s ease;
-      user-select: none;
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
 
-    button:hover {
-      background: #00acc1;
-      color: #fff;
-    }
+    button:hover { background: #00acc1; color: #fff; }
   </style>
 </head>
 <body>
+<div class="container">
 
-  <div class="container">
-
-    <!-- Tela 1 - Colaboradores -->
-    <div id="tela1">
-      <h2>COLABORADORES</h2>
-      <div class="cards">
-        <div class="card ideal">
-          Ideal
-          <span>30</span>
-        </div>
-
-        <div class="card" id="cardEfetivo">
-          Efetivo
-          <span>0</span>
-        </div>
-
-        <div class="card falta" id="cardFalta">
-          Faltas
-          <span>0</span>
-        </div>
-
-        <div class="card atestado" id="cardAtestado">
-          Atestados
-          <span>0</span>
-        </div>
-
-        <div class="card ferias" id="cardFerias">
-          Férias
-          <span>0</span>
-        </div>
-      </div>
-
-      <div class="nav" style="justify-content: center; margin-top: 24px;">
-        <button onclick="avancar()">Avançar ▶</button>
-      </div>
+  <!-- Tela 1 - Colaboradores -->
+  <div id="tela1">
+    <h2>COLABORADORES</h2>
+    <div class="cards">
+      <div class="card ideal">Ideal<span>30</span></div>
+      <div class="card">Efetivo<span id="cardEfetivo">0</span></div>
+      <div class="card falta">Faltas<span id="cardFalta">0</span></div>
+      <div class="card atestado">Atestados<span id="cardAtestado">0</span></div>
+      <div class="card ferias">Férias<span id="cardFerias">0</span></div>
     </div>
-
-    <!-- Tela 2 - Produção -->
-    <div id="tela2">
-      <h1>CAIXAS</h1>
-
-      <div class="status-box" id="statusBox">
-        PRODUÇÃO FINALIZADA
-        <small id="horaAtual">--:--</small>
-      </div>
-
-      <!-- Legenda só com quadrados brancos, alinhada à direita -->
-      <div class="legend">
-        <div class="legend-item">
-          <div class="legend-color legend-programado"></div>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color legend-produzido"></div>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color legend-diferenca"></div>
-        </div>
-      </div>
-
-      <div class="charts-row">
-        <canvas id="barChart"></canvas>
-
-        <div id="donutChartContainer">
-          <canvas id="donutChart"></canvas>
-          <div id="percentText">0%</div>
-        </div>
-      </div>
-
-      <div class="resultado" id="resultado"></div>
-
-      <div class="nav">
-        <button onclick="voltar()">◀ Voltar</button>
-        <button onclick="location.href='menu.html'">Menu</button>
-      </div>
+    <div class="nav" style="justify-content: center; margin-top: 24px;">
+      <button onclick="avancar()">Avançar ▶</button>
     </div>
-
   </div>
 
-  <script>
-    const dados = JSON.parse(localStorage.getItem("dadosProducao"));
+  <!-- Tela 2 - Produção -->
+  <div id="tela2">
+    <h1>CAIXAS</h1>
 
-    if (!dados) {
-      alert("Nenhum dado encontrado. Preencha os dados primeiro.");
-      window.location.href = "dados.html";
-    }
+    <div class="status-box" id="statusBox">
+      PRODUÇÃO FINALIZADA
+      <small id="horaAtual">--:--</small>
+    </div>
 
-    // Atualiza dados colaboradores na tela 1
-    document.querySelector("#cardEfetivo span").textContent = dados.efetivo;
-    document.querySelector("#cardFalta span").textContent = dados.falta;
-    document.querySelector("#cardAtestado span").textContent = dados.atestado;
-    document.querySelector("#cardFerias span").textContent = dados.ferias;
+    <div class="legend">
+      <div class="legend-item"><div class="legend-color legend-programado"></div></div>
+      <div class="legend-item"><div class="legend-color legend-produzido"></div></div>
+      <div class="legend-item"><div class="legend-color legend-diferenca"></div></div>
+    </div>
 
-    // Navegação telas
-    function avancar() {
-      document.getElementById('tela1').style.display = 'none';
-      document.getElementById('tela2').style.display = 'flex';
-      atualizarGrafico();
-    }
+    <div class="charts-row">
+      <canvas id="barChart"></canvas>
+      <div id="donutChartContainer">
+        <canvas id="donutChart"></canvas>
+        <div id="percentText">0%</div>
+      </div>
+    </div>
 
-    function voltar() {
-      document.getElementById('tela2').style.display = 'none';
-      document.getElementById('tela1').style.display = 'flex';
-    }
+    <div class="nav">
+      <button onclick="voltar()">◀ Voltar</button>
+      <button onclick="location.href='menu.html'">Menu</button>
+    </div>
+  </div>
 
-    // Atualiza horário atual na produção finalizada
-    function atualizaHora() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('horaAtual').innerText = `${h}:${m}`;
-    }
-    atualizaHora();
-    setInterval(atualizaHora, 60000);
+</div>
 
-    let barChart, donutChart;
+<script>
+const dados = JSON.parse(localStorage.getItem("dadosProducao"));
+if (!dados) { alert("Nenhum dado encontrado. Preencha os dados primeiro."); window.location.href = "dados.html"; }
 
-    function atualizarGrafico() {
-      const ctxBar = document.getElementById('barChart').getContext('2d');
-      const ctxDonut = document.getElementById('donutChart').getContext('2d');
-      const percentText = document.getElementById('percentText');
+document.getElementById("cardEfetivo").textContent = dados.efetivo;
+document.getElementById("cardFalta").textContent = dados.falta;
+document.getElementById("cardAtestado").textContent = dados.atestado;
+document.getElementById("cardFerias").textContent = dados.ferias;
 
-      const programado = dados.programado;
-      const produzido = dados.produzido;
-      const diferenca = produzido - programado;
+function avancar() {
+  document.getElementById('tela1').style.display='none';
+  document.getElementById('tela2').style.display='flex';
+  atualizarGrafico();
+}
 
-      let percentual = 0;
-      if (programado > 0) {
-        percentual = Math.min(100, Math.max(0, (produzido / programado) * 100));
+function voltar() {
+  document.getElementById('tela2').style.display='none';
+  document.getElementById('tela1').style.display='flex';
+}
+
+function atualizaHora() {
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('horaAtual').innerText=`${h}:${m}`;
+}
+atualizaHora();
+setInterval(atualizaHora,60000);
+
+let barChart, donutChart;
+
+function atualizarGrafico() {
+  const ctxBar=document.getElementById('barChart').getContext('2d');
+  const ctxDonut=document.getElementById('donutChart').getContext('2d');
+  const percentText=document.getElementById('percentText');
+
+  const programado=dados.programado;
+  const produzido=dados.produzido;
+  const diferenca=produzido-programado;
+
+  let percentual=0;
+  if(programado>0) percentual=Math.min(100, Math.max(0,(produzido/programado)*100));
+
+  percentText.textContent='0%';
+  if(barChart) barChart.destroy();
+  if(donutChart) donutChart.destroy();
+
+  barChart=new Chart(ctxBar,{
+    type:'bar',
+    data:{
+      labels:['Programado','Produzido','Diferença'],
+      datasets:[{
+        data:[programado, produzido, diferenca],
+        backgroundColor:['#26c6da','#90caf9','#fbc02d'],
+        borderRadius:6,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,
+      animation:{ duration:800 },
+      plugins:{ legend:{ display:false }, tooltip:{ enabled:true }, datalabels:{
+        color:'#fff', anchor:'end', align:'start', font:{ weight:'bold', size:14 },
+        formatter:function(value){ return value.toLocaleString('pt-BR'); }
+      }},
+      scales:{
+        y:{ beginAtZero:true, ticks:{ color:'#e1e7ee', font:{ size:14 } }, grid:{ color:'#16405a' } },
+        x:{ ticks:{ color:'#e1e7ee', font:{ size:16, weight:'bold' },
+          callback:function(v,i){ return [programado,produzido,diferenca][i].toLocaleString('pt-BR'); }
+        }, grid:{ display:false } }
       }
+    },
+    plugins:[ChartDataLabels]
+  });
 
-      // Atualiza texto percentual menor e centralizado
-      percentText.style.fontSize = '28px';
-      percentText.textContent = '0%';
+  donutChart=new Chart(ctxDonut,{
+    type:'doughnut',
+    data:{ labels:['Feito','Faltante'], datasets:[{ data:[percentual,100-percentual], backgroundColor:['#1de9b6','#144d56'], borderWidth:0 }]},
+    options:{ cutout:'75%', responsive:true, animation:{ animateRotate:true, duration:1200 }, plugins:{ legend:{ display:false }, tooltip:{ enabled:false } } }
+  });
 
-      // Se gráfico já existe, destrói para atualizar
-      if (barChart) barChart.destroy();
-      if (donutChart) donutChart.destroy();
+  let currentPercent=0;
+  const targetPercent=Math.round(percentual);
+  const step=targetPercent>0?Math.max(1,Math.floor(targetPercent/60)):1;
+  function animatePercent(){ if(currentPercent<targetPercent){ currentPercent+=step; if(currentPercent>targetPercent) currentPercent=targetPercent; percentText.textContent=currentPercent+'%'; requestAnimationFrame(animatePercent);}else{ percentText.textContent=targetPercent+'%';} }
+  animatePercent();
+}
 
-      // Gráfico de barras
-      barChart = new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-          labels: ['Programado', 'Produzido', 'Diferença'],
-          datasets: [{
-            label: 'Produção',
-            data: [programado, produzido, diferenca],
-            backgroundColor: ['#26c6da', '#90caf9', '#fbc02d'],
-            borderRadius: 6,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          responsive: true,
-          animation: { duration: 800 },
-          plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true },
-            datalabels: {
-              color: '#fff',
-              anchor: 'end',
-              align: 'start',
-              font: { weight: 'bold', size: 14 },
-              formatter: function(value) {
-                return value.toLocaleString('pt-BR');
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                color: '#e1e7ee',
-                font: { size: 14 }
-              },
-              grid: { color: '#16405a' }
-            },
-            x: {
-              ticks: {
-                color: '#e1e7ee',
-                font: { size: 16, weight: 'bold' },
-                callback: function(value, index) {
-                  // Mostrar valor correspondente abaixo da label
-                  const valores = [programado, produzido, diferenca];
-                  return valores[index].toLocaleString('pt-BR');
-                }
-              },
-              grid: { display: false }
-            }
-          }
-        },
-        plugins: [ChartDataLabels]
-      });
-
-      // Gráfico donut percentual
-      donutChart = new Chart(ctxDonut, {
-        type: 'doughnut',
-        data: {
-          labels: ['Feito', 'Faltante'],
-          datasets: [{
-            data: [percentual, 100 - percentual],
-            backgroundColor: ['#1de9b6', '#144d56'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          cutout: '75%',
-          responsive: true,
-          animation: { animateRotate: true, duration: 1200 },
-          plugins: {
-            legend: { display: false },
-            tooltip: { enabled: false }
-          }
-        }
-      });
-
-      // Anima o número do percentual no donut
-      let currentPercent = 0;
-      const targetPercent = Math.round(percentual);
-      const step = targetPercent > 0 ? Math.max(1, Math.floor(targetPercent / 60)) : 1;
-
-      function animatePercent() {
-        if (currentPercent < targetPercent) {
-          currentPercent += step;
-          if (currentPercent > targetPercent) currentPercent = targetPercent;
-          percentText.textContent = currentPercent + '%';
-          requestAnimationFrame(animatePercent);
-        } else {
-          percentText.textContent = targetPercent + '%';
-        }
-      }
-      animatePercent();
-
-      // Atualiza texto resumo abaixo do gráfico (se quiser remover, pode comentar)
-      document.getElementById('resultado').textContent =
-        `Programado: ${programado.toLocaleString('pt-BR')} | Produzido: ${produzido.toLocaleString('pt-BR')} | Diferença: ${diferenca.toLocaleString('pt-BR')} | ${percentual.toFixed(2)}% do planejado`;
-    }
-
-    // Inicializa mostrando a tela 1 (colaboradores)
-    document.getElementById('tela1').style.display = 'flex';
-    document.getElementById('tela2').style.display = 'none';
-
-  </script>
+document.getElementById('tela1').style.display='flex';
+document.getElementById('tela2').style.display='none';
+</script>
 </body>
 </html>
