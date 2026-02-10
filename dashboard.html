@@ -2,130 +2,177 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard</title>
 
 <style>
 body{
+  margin:0;
   font-family:Arial, sans-serif;
-  background:#f2f5f9;
+  background:#f1f5f9;
   padding:20px;
 }
-.hidden{display:none;}
-.container{
-  max-width:500px;
-  margin:auto;
-}
-.cards{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-.card{
-  background:#fff;
-  padding:15px;
-  border-radius:14px;
-  box-shadow:0 6px 15px rgba(0,0,0,.1);
-  text-align:center;
-}
-.card h3{
-  margin:0;
-  font-size:14px;
-  color:#64748b;
-}
-.card span{
-  font-size:24px;
-  font-weight:bold;
-  color:#3b82f6;
-}
-button{
-  margin-top:20px;
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#3b82f6;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-/* gráfico */
-.bar{
-  height:22px;
+button{
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.menu{
+  background:#64748b;
+  color:#fff;
+}
+
+.next{
+  background:#3b82f6;
+  color:#fff;
+  margin-top:20px;
+}
+
+.card-box{
+  background:#fff;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+  margin-top:20px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:15px;
+  margin-top:15px;
+}
+
+.card{
+  background:#f8fafc;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.card span{
+  display:block;
+  font-size:22px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+#grafico{
+  display:none;
+  margin-top:30px;
+}
+
+.barras{
+  display:flex;
+  gap:40px;
+  align-items:flex-end;
+  height:200px;
+}
+
+.coluna{
+  width:80px;
   background:#e5e7eb;
   border-radius:10px;
-  overflow:hidden;
-  margin-top:10px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
 }
-.fill{
-  height:100%;
+
+.coluna div{
+  width:100%;
+  border-radius:10px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  color:#fff;
+  font-weight:bold;
 }
-.prog{background:#ec4899;}
-.prod{background:#22c55e;}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="top">
+  <h2>📊 Dashboard</h2>
+  <button class="menu" onclick="location.href='menu.html'">Menu</button>
+</div>
 
-  <!-- TELA 1 -->
-  <div id="telaColab">
-    <h2>👥 Quadro de Colaboradores</h2>
+<div class="card-box">
+  <h3>👥 Quadro de Colaboradores</h3>
 
-    <div class="cards">
-      <div class="card"><h3>Base Ideal</h3><span>30</span></div>
-      <div class="card"><h3>Efetivo</h3><span id="ef"></span></div>
-      <div class="card"><h3>Falta</h3><span id="fa"></span></div>
-      <div class="card"><h3>Atestado</h3><span id="at"></span></div>
-      <div class="card"><h3>Férias</h3><span id="fe"></span></div>
+  <div class="cards">
+    <div class="card">Base Ideal<span>30</span></div>
+    <div class="card">Efetivo<span id="efetivo">0</span></div>
+    <div class="card">Falta<span id="falta">0</span></div>
+    <div class="card">Atestado<span id="atestado">0</span></div>
+    <div class="card">Férias<span id="ferias">0</span></div>
+  </div>
+</div>
+
+<button class="next" onclick="mostrarCaixas()">➡ Próximo</button>
+
+<div id="grafico" class="card-box">
+  <h3>📦 Caixas</h3>
+
+  <div class="barras">
+    <div class="coluna">
+      <div id="barraProg" style="background:#3b82f6;height:0%">0</div>
     </div>
-
-    <button onclick="proximo()">Próximo</button>
+    <div class="coluna">
+      <div id="barraProd" style="background:#22c55e;height:0%">0</div>
+    </div>
   </div>
 
-  <!-- TELA 2 -->
-  <div id="telaCaixas" class="hidden">
-    <h2>📦 Caixas</h2>
-
-    <p>Programado: <strong id="cp"></strong></p>
-    <div class="bar"><div id="bprog" class="fill prog"></div></div>
-
-    <p>Produzido: <strong id="cr"></strong></p>
-    <div class="bar"><div id="bprod" class="fill prod"></div></div>
-
-    <p>Diferença: <strong id="dif"></strong></p>
-
-    <button onclick="menu()">Menu</button>
-  </div>
-
+  <p>Diferença: <b id="diferenca">0</b></p>
+  <p>Produção: <b id="porcentagem">0%</b></p>
 </div>
 
 <script>
-const dados = JSON.parse(localStorage.getItem("dadosSistema"))
+window.onload = function(){
 
-ef.textContent = dados.efetivo
-fa.textContent = dados.falta
-at.textContent = dados.atestado
-fe.textContent = dados.ferias
+  const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
+    efetivo:0,falta:0,atestado:0,ferias:0,programado:0,produzido:0
+  };
 
-cp.textContent = dados.programado
-cr.textContent = dados.produzido
-dif.textContent = dados.programado - dados.produzido
+  document.getElementById("efetivo").textContent = dados.efetivo;
+  document.getElementById("falta").textContent = dados.falta;
+  document.getElementById("atestado").textContent = dados.atestado;
+  document.getElementById("ferias").textContent = dados.ferias;
 
-bprog.style.width = "100%"
-bprod.style.width = Math.min(
-  (dados.produzido / dados.programado) * 100, 100
-) + "%"
+  window.mostrarCaixas = function(){
+    document.getElementById("grafico").style.display="block";
 
-function proximo(){
-  telaColab.classList.add("hidden")
-  telaCaixas.classList.remove("hidden")
-}
+    const max = Math.max(dados.programado, dados.produzido, 1);
 
-function menu(){
-  window.location.href = "dados2.html"
+    const hProg = (dados.programado / max) * 100;
+    const hProd = (dados.produzido / max) * 100;
+
+    const barraProg = document.getElementById("barraProg");
+    const barraProd = document.getElementById("barraProd");
+
+    barraProg.style.height = hProg + "%";
+    barraProg.textContent = dados.programado;
+
+    barraProd.style.height = hProd + "%";
+    barraProd.textContent = dados.produzido;
+
+    document.getElementById("diferenca").textContent =
+      dados.produzido - dados.programado;
+
+    document.getElementById("porcentagem").textContent =
+      dados.programado
+        ? ((dados.produzido / dados.programado) * 100).toFixed(1) + "%"
+        : "0%";
+  }
 }
 </script>
 
