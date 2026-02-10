@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Produção</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #232526, #414345);
+      padding: 20px;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .dashboard {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      padding: 15px;
+      border-radius: 6px;
+      background: #1976d2;
+      color: #fff;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .card span {
+      display: block;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .ideal {
+      background: #455a64;
+    }
+
+    .falta {
+      background: #d32f2f;
+    }
+
+    .atestado {
+      background: #f57c00;
+    }
+
+    .ferias {
+      background: #388e3c;
+    }
+
+    .resultado {
+      text-align: center;
+      margin: 15px 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .positivo {
+      color: green;
+    }
+
+    .negativo {
+      color: red;
+    }
+
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+
+    .voltar {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .voltar button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background: #1976d2;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .voltar button:hover {
+      background: #125ea6;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Dashboard de Produção</h2>
+
+  <div class="dashboard">
+
+    <div class="cards">
+      <div class="card ideal">
+        Ideal
+        <span>30</span>
+      </div>
+
+      <div class="card">
+        Efetivo
+        <span id="efetivo">0</span>
+      </div>
+
+      <div class="card falta">
+        Faltas
+        <span id="falta">0</span>
+      </div>
+
+      <div class="card atestado">
+        Atestados
+        <span id="atestado">0</span>
+      </div>
+
+      <div class="card ferias">
+        Férias
+        <span id="ferias">0</span>
+      </div>
+    </div>
+
+    <div class="resultado" id="resultado"></div>
+
+    <canvas id="grafico"></canvas>
+
+    <div class="voltar">
+      <button onclick="location.href='menu.html'">
+        Voltar ao Menu
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    const dados = JSON.parse(localStorage.getItem("dadosProducao"));
+
+    if (!dados) {
+      alert("Nenhum dado encontrado. Preencha os dados primeiro.");
+      window.location.href = "dados.html";
+    }
+
+    document.getElementById("efetivo").innerText = dados.efetivo;
+    document.getElementById("falta").innerText = dados.falta;
+    document.getElementById("atestado").innerText = dados.atestado;
+    document.getElementById("ferias").innerText = dados.ferias;
+
+    const diferenca = dados.produzido - dados.programado;
+    const percentual = ((dados.produzido / dados.programado) * 100).toFixed(2);
+
+    const resultado = document.getElementById("resultado");
+    resultado.innerText =
+      `Programado: ${dados.programado} | Produzido: ${dados.produzido} | Diferença: ${diferenca} | Resultado: ${percentual}%`;
+
+    resultado.className = "resultado " + (diferenca >= 0 ? "positivo" : "negativo");
+
+    new Chart(document.getElementById("grafico"), {
+      type: 'bar',
+      data: {
+        labels: ['Programado', 'Produzido'],
+        datasets: [{
+          label: 'Produção',
+          data: [dados.programado, dados.produzido],
+          backgroundColor: ['#1976d2', '#2e7d32']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+  </script>
+
+</body>
+</html>
