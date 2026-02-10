@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard Produção - Estilo Avançado</title>
-  
+  <title>Dashboard Produção - Sequencial Moderno</title>
+
   <!-- Chart.js + plugin datalabels -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -25,17 +25,28 @@
       background: #142b44;
       border-radius: 12px;
       padding: 30px;
-      width: 850px;
+      width: 900px;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
       position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      user-select: none;
+    }
+
+    h1, h2 {
+      text-align: center;
+      font-weight: 900;
+      letter-spacing: 4px;
+      margin: 0 0 20px 0;
     }
 
     h1 {
-      text-align: center;
-      font-weight: 900;
       font-size: 36px;
-      letter-spacing: 4px;
-      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
     }
 
     /* Caixa PRODUÇÃO FINALIZADA */
@@ -49,7 +60,6 @@
       font-weight: 600;
       font-size: 16px;
       text-align: center;
-      user-select: none;
     }
 
     .status-box small {
@@ -60,53 +70,67 @@
       font-weight: normal;
     }
 
-    .charts-row {
+    /* --- TELA 1: Colaboradores --- */
+    #tela1 {
       display: flex;
-      align-items: center;
-      gap: 40px;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      flex: 1 1 160px;
+      max-width: 180px;
+      background: #1976d2;
+      border-radius: 10px;
+      padding: 24px 15px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      color: white;
+      transition: background-color 0.3s ease;
+      cursor: default;
+    }
+
+    .card:hover {
+      background: #145a9a;
+    }
+
+    .card span {
+      display: block;
+      font-size: 42px;
+      font-weight: 900;
       margin-top: 10px;
+      font-family: 'Segoe UI Black', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Gráfico de barras */
-    #barChart {
-      flex: 2;
-      max-width: 550px;
-    }
+    .ideal { background: #455a64; }
+    .falta { background: #d32f2f; }
+    .atestado { background: #f57c00; }
+    .ferias { background: #388e3c; }
 
-    /* Gráfico donut percentual */
-    #donutChartContainer {
-      flex: 1;
+    /* --- TELA 2: Produção --- */
+    #tela2 {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
       position: relative;
-      width: 180px;
-      height: 180px;
     }
 
-    #donutChart {
-      width: 180px !important;
-      height: 180px !important;
-    }
-
-    /* Texto percentual dentro do donut */
-    #percentText {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 44px;
-      font-weight: 700;
-      color: #1de9b6;
-      user-select: none;
-    }
-
-    /* Legenda custom */
     .legend {
       display: flex;
       justify-content: center;
-      margin-bottom: 12px;
-      gap: 28px;
+      gap: 30px;
       font-weight: 700;
       font-size: 14px;
       user-select: none;
+      margin-bottom: 10px;
     }
 
     .legend-item {
@@ -116,28 +140,61 @@
     }
 
     .legend-color {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
     }
 
-    .legend-programado { background: #26c6da; } /* azul claro */
-    .legend-produzido { background: #90caf9; }  /* azul acinzentado */
-    .legend-diferenca { background: #fbc02d; }  /* amarelo */
+    .legend-programado { background: #26c6da; }
+    .legend-produzido { background: #90caf9; }
+    .legend-diferenca { background: #fbc02d; }
 
-    /* Resultado texto */
+    .charts-row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    #barChart {
+      width: 570px !important;
+      height: 320px !important;
+    }
+
+    #donutChartContainer {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      user-select: none;
+    }
+
+    #donutChart {
+      width: 130px !important;
+      height: 130px !important;
+    }
+
+    #percentText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      font-weight: 700;
+      color: #1de9b6;
+      pointer-events: none;
+      user-select: none;
+    }
+
     .resultado {
       text-align: center;
-      margin-top: 30px;
       font-weight: 700;
       font-size: 18px;
       color: #fbc02d;
       user-select: none;
+      margin-top: 10px;
     }
 
-    /* Botões Voltar e Menu */
     .nav {
-      margin-top: 40px;
+      margin-top: 30px;
       display: flex;
       justify-content: space-between;
     }
@@ -146,7 +203,7 @@
       background: #26c6da;
       border: none;
       border-radius: 6px;
-      padding: 12px 26px;
+      padding: 12px 28px;
       color: #0b1f2d;
       font-weight: 700;
       font-size: 16px;
@@ -166,39 +223,76 @@
 
   <div class="container">
 
-    <h1>CAIXAS</h1>
+    <!-- Tela 1 - Colaboradores -->
+    <div id="tela1">
+      <h2>COLABORADORES</h2>
+      <div class="cards">
+        <div class="card ideal">
+          Ideal
+          <span>30</span>
+        </div>
 
-    <div class="status-box" id="statusBox">
-      PRODUÇÃO FINALIZADA
-      <small id="horaAtual">--:--</small>
-    </div>
+        <div class="card" id="cardEfetivo">
+          Efetivo
+          <span>0</span>
+        </div>
 
-    <div class="legend">
-      <div class="legend-item"><div class="legend-color legend-programado"></div> PROGRAMADO </div>
-      <div class="legend-item"><div class="legend-color legend-produzido"></div> PRODUZIDO </div>
-      <div class="legend-item"><div class="legend-color legend-diferenca"></div> DIFERENÇA </div>
-    </div>
+        <div class="card falta" id="cardFalta">
+          Faltas
+          <span>0</span>
+        </div>
 
-    <div class="charts-row">
-      <canvas id="barChart"></canvas>
+        <div class="card atestado" id="cardAtestado">
+          Atestados
+          <span>0</span>
+        </div>
 
-      <div id="donutChartContainer">
-        <canvas id="donutChart"></canvas>
-        <div id="percentText">0%</div>
+        <div class="card ferias" id="cardFerias">
+          Férias
+          <span>0</span>
+        </div>
+      </div>
+
+      <div class="nav" style="justify-content: center; margin-top: 24px;">
+        <button onclick="avancar()">Avançar ▶</button>
       </div>
     </div>
 
-    <div class="resultado" id="resultado"></div>
+    <!-- Tela 2 - Produção -->
+    <div id="tela2">
+      <h1>CAIXAS</h1>
 
-    <div class="nav">
-      <button onclick="voltar()">◀ Voltar</button>
-      <button onclick="location.href='menu.html'">Menu</button>
+      <div class="status-box" id="statusBox">
+        PRODUÇÃO FINALIZADA
+        <small id="horaAtual">--:--</small>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-color legend-programado"></div> PROGRAMADO </div>
+        <div class="legend-item"><div class="legend-color legend-produzido"></div> PRODUZIDO </div>
+        <div class="legend-item"><div class="legend-color legend-diferenca"></div> DIFERENÇA </div>
+      </div>
+
+      <div class="charts-row">
+        <canvas id="barChart"></canvas>
+
+        <div id="donutChartContainer">
+          <canvas id="donutChart"></canvas>
+          <div id="percentText">0%</div>
+        </div>
+      </div>
+
+      <div class="resultado" id="resultado"></div>
+
+      <div class="nav">
+        <button onclick="voltar()">◀ Voltar</button>
+        <button onclick="location.href='menu.html'">Menu</button>
+      </div>
     </div>
 
   </div>
 
   <script>
-    // Puxa os dados do localStorage
     const dados = JSON.parse(localStorage.getItem("dadosProducao"));
 
     if (!dados) {
@@ -206,7 +300,25 @@
       window.location.href = "dados.html";
     }
 
-    // Atualiza o horário atual (hora:minuto)
+    // Atualiza dados colaboradores na tela 1
+    document.querySelector("#cardEfetivo span").textContent = dados.efetivo;
+    document.querySelector("#cardFalta span").textContent = dados.falta;
+    document.querySelector("#cardAtestado span").textContent = dados.atestado;
+    document.querySelector("#cardFerias span").textContent = dados.ferias;
+
+    // Navegação telas
+    function avancar() {
+      document.getElementById('tela1').style.display = 'none';
+      document.getElementById('tela2').style.display = 'flex';
+      atualizarGrafico();
+    }
+
+    function voltar() {
+      document.getElementById('tela2').style.display = 'none';
+      document.getElementById('tela1').style.display = 'flex';
+    }
+
+    // Atualiza horário atual na produção finalizada
     function atualizaHora() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -214,122 +326,129 @@
       document.getElementById('horaAtual').innerText = `${h}:${m}`;
     }
     atualizaHora();
-    // Atualiza hora a cada minuto
-    setInterval(atualizaHora, 60*1000);
+    setInterval(atualizaHora, 60000);
 
-    const ctxBar = document.getElementById('barChart').getContext('2d');
-    const ctxDonut = document.getElementById('donutChart').getContext('2d');
-    const percentText = document.getElementById('percentText');
+    let barChart, donutChart;
 
-    const programado = dados.programado;
-    const produzido = dados.produzido;
-    const diferenca = produzido - programado;
+    function atualizarGrafico() {
+      const ctxBar = document.getElementById('barChart').getContext('2d');
+      const ctxDonut = document.getElementById('donutChart').getContext('2d');
+      const percentText = document.getElementById('percentText');
 
-    // Percentual feito, entre 0 e 100
-    let percentual = 0;
-    if (programado > 0) {
-      percentual = Math.min(100, Math.max(0, (produzido / programado) * 100));
-    }
+      const programado = dados.programado;
+      const produzido = dados.produzido;
+      const diferenca = produzido - programado;
 
-    // Gráfico barras
-    const barChart = new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels: ['Programado', 'Produzido', 'Diferença'],
-        datasets: [{
-          label: 'Produção',
-          data: [programado, produzido, diferenca],
-          backgroundColor: ['#26c6da', '#90caf9', '#fbc02d'],
-          borderRadius: 6,
-          borderSkipped: false
-        }]
-      },
-      options: {
-        responsive: true,
-        animation: {
-          duration: 800
+      let percentual = 0;
+      if (programado > 0) {
+        percentual = Math.min(100, Math.max(0, (produzido / programado) * 100));
+      }
+
+      // Atualiza texto percentual menor e centralizado
+      percentText.style.fontSize = '28px';
+      percentText.textContent = '0%';
+
+      // Se gráfico já existe, destrói para atualizar
+      if (barChart) barChart.destroy();
+      if (donutChart) donutChart.destroy();
+
+      // Gráfico de barras
+      barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: ['Programado', 'Produzido', 'Diferença'],
+          datasets: [{
+            label: 'Produção',
+            data: [programado, produzido, diferenca],
+            backgroundColor: ['#26c6da', '#90caf9', '#fbc02d'],
+            borderRadius: 6,
+            borderSkipped: false
+          }]
         },
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true },
-          datalabels: {
-            color: '#fff',
-            anchor: 'end',
-            align: 'start',
-            font: { weight: 'bold', size: 14 },
-            formatter: function(value) {
-              return value.toLocaleString('pt-BR');
-            }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              color: '#e1e7ee',
-              font: { size: 14 }
-            },
-            grid: {
-              color: '#16405a'
+        options: {
+          responsive: true,
+          animation: { duration: 800 },
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true },
+            datalabels: {
+              color: '#fff',
+              anchor: 'end',
+              align: 'start',
+              font: { weight: 'bold', size: 14 },
+              formatter: function(value) {
+                return value.toLocaleString('pt-BR');
+              }
             }
           },
-          x: {
-            ticks: {
-              color: '#e1e7ee',
-              font: { size: 14, weight: 'bold' }
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#e1e7ee',
+                font: { size: 14 }
+              },
+              grid: { color: '#16405a' }
             },
-            grid: { display: false }
+            x: {
+              ticks: {
+                color: '#e1e7ee',
+                font: { size: 14, weight: 'bold' }
+              },
+              grid: { display: false }
+            }
+          }
+        },
+        plugins: [ChartDataLabels]
+      });
+
+      // Gráfico donut percentual
+      donutChart = new Chart(ctxDonut, {
+        type: 'doughnut',
+        data: {
+          labels: ['Feito', 'Faltante'],
+          datasets: [{
+            data: [percentual, 100 - percentual],
+            backgroundColor: ['#1de9b6', '#144d56'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          cutout: '75%',
+          responsive: true,
+          animation: { animateRotate: true, duration: 1200 },
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
           }
         }
-      },
-      plugins: [ChartDataLabels]
-    });
+      });
 
-    // Gráfico donut percentual
-    const donutChart = new Chart(ctxDonut, {
-      type: 'doughnut',
-      data: {
-        labels: ['Feito', 'Faltante'],
-        datasets: [{
-          data: [percentual, 100 - percentual],
-          backgroundColor: ['#1de9b6', '#144d56'],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        cutout: '75%',
-        responsive: true,
-        animation: {
-          animateRotate: true,
-          duration: 1200
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: false }
+      // Anima o número do percentual no donut
+      let currentPercent = 0;
+      const targetPercent = Math.round(percentual);
+      const step = targetPercent > 0 ? Math.max(1, Math.floor(targetPercent / 60)) : 1;
+
+      function animatePercent() {
+        if (currentPercent < targetPercent) {
+          currentPercent += step;
+          if (currentPercent > targetPercent) currentPercent = targetPercent;
+          percentText.textContent = currentPercent + '%';
+          requestAnimationFrame(animatePercent);
+        } else {
+          percentText.textContent = targetPercent + '%';
         }
       }
-    });
+      animatePercent();
 
-    // Atualiza o texto percentual animado
-    let currentPercent = 0;
-    const targetPercent = Math.round(percentual);
-    const step = targetPercent > 0 ? Math.max(1, Math.floor(targetPercent / 60)) : 1; // anima em até 60 frames
-
-    function animatePercent() {
-      if(currentPercent < targetPercent) {
-        currentPercent += step;
-        if(currentPercent > targetPercent) currentPercent = targetPercent;
-        percentText.textContent = currentPercent + '%';
-        requestAnimationFrame(animatePercent);
-      } else {
-        percentText.textContent = targetPercent + '%';
-      }
+      // Atualiza texto resumo abaixo do gráfico
+      document.getElementById('resultado').textContent =
+        `Programado: ${programado.toLocaleString('pt-BR')} | Produzido: ${produzido.toLocaleString('pt-BR')} | Diferença: ${diferenca.toLocaleString('pt-BR')} | ${percentual.toFixed(2)}% do planejado`;
     }
-    animatePercent();
 
-    // Texto resumo abaixo
-    const resultado = document.getElementById('resultado');
-    resultado.innerText = `Programado: ${programado.toLocaleString('pt-BR')} | Produzido: ${produzido.toLocaleString('pt-BR')} | Diferença: ${diferenca.toLocaleString('pt-BR')} | ${percentual.toFixed(2)}% do planejado`;
+    // Inicializa mostrando a tela 1 (colaboradores)
+    document.getElementById('tela1').style.display = 'flex';
+    document.getElementById('tela2').style.display = 'none';
 
   </script>
 </body>
