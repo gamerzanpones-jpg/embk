@@ -2,50 +2,115 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard 2 - Caixas</title>
+<title>Dashboard - Caixas</title>
 
 <style>
 :root{
   --azul:#3b82f6;
   --verde:#22c55e;
+  --cinza:#64748b;
 }
 
 body{
   margin:0;
   font-family:'Segoe UI', Arial, sans-serif;
-  background:linear-gradient(180deg,#f1f5f9,#e2e8f0);
-  padding:20px;
+  background:linear-gradient(180deg,#e0f2fe,#f8fafc);
+  padding:30px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
 }
 
 button{
-  padding:10px 18px;
+  padding:10px 20px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   cursor:pointer;
   font-weight:600;
-  background:#64748b;
+  background:var(--cinza);
   color:#fff;
+  transition:.2s;
 }
 
-.card-box{
+button:hover{
+  transform:scale(1.05);
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:30px;
+}
+
+.card{
+  padding:30px;
+  border-radius:26px;
+  box-shadow:
+    0 25px 50px rgba(0,0,0,.15),
+    inset 0 1px 0 rgba(255,255,255,.7);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,rgba(255,255,255,.35),transparent);
+}
+
+.programado{
+  background:linear-gradient(135deg,#dbeafe,#bfdbfe);
+}
+
+.produzido{
+  background:linear-gradient(135deg,#dcfce7,#bbf7d0);
+}
+
+.card h2{
+  margin:0;
+  font-size:28px;
+  font-weight:700;
+}
+
+.numero{
+  font-size:90px;
+  font-weight:900;
+  margin:20px 0;
+  line-height:1;
+}
+
+.sub{
+  font-size:18px;
+  opacity:.8;
+}
+
+.grafico-box{
   background:#fff;
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 12px 35px rgba(0,0,0,.1);
+  padding:30px;
+  border-radius:26px;
+  box-shadow:0 20px 45px rgba(0,0,0,.15);
+  margin-top:35px;
 }
 
 .barras{
   display:flex;
-  gap:50px;
+  justify-content:center;
+  gap:70px;
   align-items:flex-end;
   height:260px;
-  margin-top:25px;
+  margin-top:30px;
 }
 
 .coluna{
-  width:100px;
+  width:120px;
   background:#e5e7eb;
-  border-radius:18px;
+  border-radius:22px;
   display:flex;
   align-items:flex-end;
   justify-content:center;
@@ -54,30 +119,50 @@ button{
 
 .coluna div{
   width:100%;
-  border-radius:18px;
+  border-radius:22px;
   display:flex;
   align-items:flex-end;
   justify-content:center;
   color:#fff;
   font-weight:800;
-  font-size:22px;
-  padding-bottom:8px;
+  font-size:26px;
+  padding-bottom:10px;
   transition:.4s;
 }
 
 .info{
-  margin-top:18px;
-  font-size:18px;
+  margin-top:20px;
+  font-size:22px;
+  text-align:center;
 }
 </style>
 </head>
 
 <body>
 
-<button onclick="location.href='dashboard.html'">⬅ Voltar</button>
+<div class="top">
+  <h2>📦 Produção - Caixas</h2>
+  <button onclick="location.href='dashboard.html'">⬅ Voltar</button>
+</div>
 
-<div class="card-box">
-  <h3>📦 Caixas</h3>
+<div class="cards">
+
+  <div class="card programado">
+    <h2>📋 Programado</h2>
+    <div class="numero" id="programado">0</div>
+    <div class="sub">Meta do dia</div>
+  </div>
+
+  <div class="card produzido">
+    <h2>🏭 Produzido</h2>
+    <div class="numero" id="produzido">0</div>
+    <div class="sub">Realizado</div>
+  </div>
+
+</div>
+
+<div class="grafico-box">
+  <h3>📊 Comparativo</h3>
 
   <div class="barras">
     <div class="coluna">
@@ -89,8 +174,10 @@ button{
     </div>
   </div>
 
-  <div class="info">Diferença: <b id="diferenca">0</b></div>
-  <div class="info">Produção: <b id="porcentagem">0%</b></div>
+  <div class="info">
+    Diferença: <b id="diferenca">0</b> |
+    Produção: <b id="porcentagem">0%</b>
+  </div>
 </div>
 
 <script>
@@ -98,6 +185,9 @@ window.onload = function(){
   const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
     programado:0, produzido:0
   };
+
+  document.getElementById("programado").textContent = dados.programado;
+  document.getElementById("produzido").textContent = dados.produzido;
 
   const max = Math.max(dados.programado, dados.produzido, 1);
 
