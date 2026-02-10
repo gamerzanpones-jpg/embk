@@ -3,38 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 Dados de Produção</title>
+<title>Dados de Produção</title>
 
 <style>
 body{
-  font-family: Arial, sans-serif;
+  font-family:Arial, sans-serif;
   background:#f2f5f9;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
+  margin:0;
 }
+
 .card{
   background:#fff;
   padding:20px;
   border-radius:12px;
   width:320px;
-  box-shadow:0 10px 25px rgba(0,0,0,.1);
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
 }
+
 h2{
   text-align:center;
   color:#3b82f6;
 }
+
 label{
   display:block;
   margin-top:10px;
   font-weight:bold;
 }
+
 input{
   width:100%;
   padding:8px;
-  margin-top:4px;
+  margin-top:5px;
 }
+
 button{
   margin-top:15px;
   width:100%;
@@ -45,20 +51,18 @@ button{
   border-radius:8px;
   cursor:pointer;
 }
-button:hover{
-  opacity:.9;
-}
 </style>
 </head>
 
 <body>
+
 <div class="card">
   <h2>Registrar Produção</h2>
 
   <label>Data</label>
   <input type="date" id="data">
 
-  <label>Programado</label>
+  <label>Base (Programado)</label>
   <input type="number" id="programado" value="30">
 
   <label>Produzido</label>
@@ -78,18 +82,33 @@ function salvar(){
     return
   }
 
-  const dia = new Date(data).getDate()
+  const dia = new Date(data + "T00:00:00").getDate()
 
-  const registro = { data, dia, programado, produzido }
+  const registro = {
+    data: data,
+    dia: dia,
+    programado: programado,
+    produzido: produzido
+  }
 
-  const dados = JSON.parse(localStorage.getItem("dadosProducao")) || []
+  let dados = []
+  try{
+    const salvo = localStorage.getItem("dadosProducao")
+    if(salvo){
+      dados = JSON.parse(salvo)
+    }
+  }catch(e){
+    dados = []
+  }
 
   dados.push(registro)
 
   localStorage.setItem("dadosProducao", JSON.stringify(dados))
 
   alert("Dados salvos com sucesso ✅")
+  document.getElementById("produzido").value = ""
 }
 </script>
+
 </body>
 </html>
