@@ -3,116 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Produção</title>
+<title>Dashboard</title>
 
 <style>
 body{
   font-family:Arial, sans-serif;
   background:#f2f5f9;
   padding:20px;
-  margin:0;
 }
-
-h1{
-  text-align:center;
-  color:#3b82f6;
-}
-
-#dashboard{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
-  gap:16px;
-  margin-top:20px;
-}
-
 .card{
   background:#fff;
-  border-radius:14px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-  padding:14px;
+  padding:20px;
+  border-radius:12px;
+  max-width:420px;
+  margin:auto;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
   text-align:center;
 }
-
-.dia{
-  font-size:26px;
-  font-weight:bold;
-  color:#ec4899;
-  margin-bottom:8px;
+h2{color:#3b82f6;}
+.ok{color:#22c55e;font-weight:bold;}
+.fail{color:#ef4444;font-weight:bold;}
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  background:#3b82f6;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
-
-.item{
-  font-size:14px;
-  margin:5px 0;
-}
-
-.ok{
-  color:#22c55e;
-  font-weight:bold;
-}
-
-.fail{
-  color:#ef4444;
-  font-weight:bold;
-}
-
-.msg{
-  grid-column:1/-1;
-  text-align:center;
-  color:#666;
+.hidden{display:none;}
+.percent{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#fff;
+  padding:10px 15px;
+  border-radius:10px;
+  box-shadow:0 6px 15px rgba(0,0,0,.1);
 }
 </style>
 </head>
 
 <body>
 
-<h1>Dashboard de Produção</h1>
+<div class="percent" id="percentual"></div>
 
-<div id="dashboard">
-  <div class="msg">Carregando dados…</div>
+<div class="card" id="cardColab">
+  <h2>👥 Quadro de Colaboradores</h2>
+  <p>Efetivo: <span id="ef"></span></p>
+  <p>Falta: <span id="fa"></span></p>
+  <p>Atestado: <span id="at"></span></p>
+  <p>Férias: <span id="fe"></span></p>
+  <p id="status"></p>
+
+  <button onclick="proximo()">Próximo</button>
+</div>
+
+<div class="card hidden" id="cardCaixas">
+  <h2>📦 Produção de Caixas</h2>
+  <p>Programado: <span id="cp"></span></p>
+  <p>Produzido: <span id="cr"></span></p>
+  <p>Diferença: <span id="dif"></span></p>
+
+  <button onclick="voltar()">Voltar</button>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+const dados = JSON.parse(localStorage.getItem("dadosDashboard"))
 
-  const container = document.getElementById("dashboard")
-  container.innerHTML = ""
+const totalEfetivo = dados.efetivo
+const bateuBase = totalEfetivo >= dados.baseIdeal
 
-  let dados = []
-  try{
-    const salvo = localStorage.getItem("dadosProducao")
-    if(salvo){
-      dados = JSON.parse(salvo)
-    }
-  }catch(e){
-    dados = []
-  }
+ef.textContent = dados.efetivo
+fa.textContent = dados.falta
+at.textContent = dados.atestado
+fe.textContent = dados.ferias
 
-  if(!Array.isArray(dados) || dados.length === 0){
-    container.innerHTML = "<div class='msg'>Nenhum dado registrado</div>"
-    return
-  }
+status.innerHTML = bateuBase
+  ? "<span class='ok'>Base atingida</span>"
+  : "<span class='fail'>Base NÃO atingida</span>"
 
-  dados.forEach(function(reg){
-    const dia = reg.dia || "-"
-    const base = Number(reg.programado) || 0
-    const prod = Number(reg.produzido) || 0
-    const falta = base - prod
+cp.textContent = dados.caixasProgramadas
+cr.textContent = dados.caixasProduzidas
+dif.textContent = dados.caixasProduzidas - dados.caixasProgramadas
 
-    const card = document.createElement("div")
-    card.className = "card"
+const perc = Math.round((dados.caixasProduzidas / dados.caixasProgramadas) * 100)
+percentual.textContent = perc + "% produzido"
 
-    card.innerHTML =
-      "<div class='dia'>" + dia + "</div>" +
-      "<div class='item'>Base: " + base + "</div>" +
-      "<div class='item ok'>Produzido: " + prod + "</div>" +
-      "<div class='item " + (falta > 0 ? "fail" : "ok") + "'>" +
-        "Falta: " + (falta > 0 ? falta : 0) +
-      "</div>"
-
-    container.appendChild(card)
-  })
-
-})
+function proximo(){
+  cardColab.classList.add("hidden")
+  cardCaixas.classList.remove("hidden")
+}
+function voltar(){
+  cardCaixas.classList.add("hidden")
+  cardColab.classList.remove("hidden")
+}
 </script>
 
 </body>
