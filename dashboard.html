@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard - Caixas</title>
+<title>Dashboard - Colaboradores</title>
 
 <style>
 :root{
   --azul:#3b82f6;
   --verde:#22c55e;
   --amarelo:#facc15;
-  --vermelho:#ef4444;
   --cinza:#64748b;
 }
 
@@ -41,12 +40,15 @@ button{
   border-radius:10px;
   cursor:pointer;
   font-weight:600;
-  background:var(--cinza);
-  color:#fff;
   transition:.2s;
 }
 
 button:hover{transform:scale(1.05);}
+
+.menu{
+  background:var(--cinza);
+  color:#fff;
+}
 
 .card-box{
   background:#fff;
@@ -90,20 +92,16 @@ button:hover{transform:scale(1.05);}
   line-height:1;
 }
 
-.programado{
+.base{
   background:linear-gradient(135deg,#dbeafe,#bfdbfe);
 }
 
-.produzido{
+.efetivo{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
 }
 
-.diferenca{
+.alerta{
   background:linear-gradient(135deg,#fef9c3,#fde68a);
-}
-
-.porcentagem{
-  background:linear-gradient(135deg,#fee2e2,#fecaca);
 }
 </style>
 </head>
@@ -113,64 +111,49 @@ button:hover{transform:scale(1.05);}
 <div class="container">
 
   <div class="top">
-    <h2>📦 Dashboard - Caixas</h2>
-    <button onclick="location.href='dashboard.html'">⬅ Voltar</button>
+    <h2>👥 Dashboard - Colaboradores</h2>
+    <button class="menu" onclick="location.href='dashboard.html'">⬅ Voltar</button>
   </div>
 
   <div class="card-box">
-    <h3>📊 Produção</h3>
+    <h3>📋 Modelo de Colaboradores</h3>
 
     <div class="cards">
 
-      <div class="card programado">
-        <div class="emoji">📋</div>
-        Programado
-        <span id="programado">0</span>
+      <div class="card base">
+        <div class="emoji">🎯</div>
+        Base Ideal
+        <span>0</span>
       </div>
 
-      <div class="card produzido">
-        <div class="emoji">🏭</div>
-        Produzido
-        <span id="produzido">0</span>
+      <div class="card efetivo">
+        <div class="emoji">👨‍🏭</div>
+        Efetivo
+        <span>0</span>
       </div>
 
-      <div class="card diferenca">
-        <div class="emoji">➖</div>
-        Diferença
-        <span id="diferenca">0</span>
+      <div class="card alerta">
+        <div class="emoji">❌</div>
+        Falta
+        <span>0</span>
       </div>
 
-      <div class="card porcentagem">
-        <div class="emoji">📈</div>
-        Produção
-        <span id="porcentagem">0%</span>
+      <div class="card alerta">
+        <div class="emoji">📝</div>
+        Atestado
+        <span>0</span>
+      </div>
+
+      <div class="card alerta">
+        <div class="emoji">🏖️</div>
+        Férias
+        <span>0</span>
       </div>
 
     </div>
   </div>
 
 </div>
-
-<script>
-window.onload = function(){
-  const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
-    programado:0,
-    produzido:0
-  };
-
-  const programado = dados.programado;
-  const produzido  = dados.produzido;
-  const diferenca  = produzido - programado;
-  const porcentagem = programado
-    ? ((produzido / programado) * 100).toFixed(1) + "%"
-    : "0%";
-
-  document.getElementById("programado").textContent  = programado;
-  document.getElementById("produzido").textContent   = produzido;
-  document.getElementById("diferenca").textContent   = diferenca;
-  document.getElementById("porcentagem").textContent = porcentagem;
-}
-</script>
 
 </body>
 </html>
