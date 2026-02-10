@@ -16,7 +16,16 @@ body{
   margin:0;
   font-family:'Segoe UI', Arial, sans-serif;
   background:linear-gradient(180deg,#f1f5f9,#e2e8f0);
+}
+
+.container{
+  max-width:1200px;
+  margin:0 auto;
   padding:20px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
 .top{
@@ -45,6 +54,7 @@ button:hover{transform:scale(1.05);}
   background:var(--azul);
   color:#fff;
   margin-top:30px;
+  align-self:flex-end;
 }
 
 .card-box{
@@ -101,52 +111,56 @@ button:hover{transform:scale(1.05);}
 
 <body>
 
-<div class="top">
-  <h2>📊 Dashboard</h2>
-  <button class="menu" onclick="location.href='menu.html'">Menu</button>
-</div>
+<div class="container">
 
-<div class="card-box">
-  <h3>👥 Quadro de Colaboradores</h3>
-
-  <div class="cards">
-
-    <div class="card base">
-      <div class="emoji">🎯</div>
-      Base Ideal
-      <span>30</span>
-    </div>
-
-    <div class="card efetivo">
-      <div class="emoji">👨‍🏭</div>
-      Efetivo
-      <span id="efetivo">0</span>
-    </div>
-
-    <div class="card alerta">
-      <div class="emoji">❌</div>
-      Falta
-      <span id="falta">0</span>
-    </div>
-
-    <div class="card alerta">
-      <div class="emoji">📝</div>
-      Atestado
-      <span id="atestado">0</span>
-    </div>
-
-    <div class="card alerta">
-      <div class="emoji">🏖️</div>
-      Férias
-      <span id="ferias">0</span>
-    </div>
-
+  <div class="top">
+    <h2>📊 Dashboard</h2>
+    <button class="menu" onclick="location.href='menu.html'">Menu</button>
   </div>
-</div>
 
-<button class="next" onclick="location.href='dashboard2.html'">
-  ➡ Próximo
-</button>
+  <div class="card-box">
+    <h3>👥 Quadro de Colaboradores</h3>
+
+    <div class="cards">
+
+      <div class="card base">
+        <div class="emoji">🎯</div>
+        Base Ideal
+        <span>30</span>
+      </div>
+
+      <div class="card efetivo">
+        <div class="emoji">👨‍🏭</div>
+        Efetivo
+        <span id="efetivo">0</span>
+      </div>
+
+      <div class="card alerta">
+        <div class="emoji">❌</div>
+        Falta
+        <span id="falta">0</span>
+      </div>
+
+      <div class="card alerta">
+        <div class="emoji">📝</div>
+        Atestado
+        <span id="atestado">0</span>
+      </div>
+
+      <div class="card alerta">
+        <div class="emoji">🏖️</div>
+        Férias
+        <span id="ferias">0</span>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="next" onclick="location.href='dashboard2.html'">
+    ➡ Próximo
+  </button>
+
+</div>
 
 <script>
 window.onload = function(){
