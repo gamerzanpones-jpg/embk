@@ -34,7 +34,7 @@ button{
   transition:.2s;
 }
 
-button:hover{transform:scale(1.03);}
+button:hover{transform:scale(1.05);}
 
 .menu{
   background:var(--cinza);
@@ -44,48 +44,49 @@ button:hover{transform:scale(1.03);}
 .next{
   background:var(--azul);
   color:#fff;
-  margin-top:25px;
+  margin-top:30px;
 }
 
 .card-box{
   background:#fff;
-  padding:22px;
-  border-radius:18px;
+  padding:25px;
+  border-radius:20px;
   box-shadow:
-    0 10px 30px rgba(0,0,0,.08),
+    0 12px 35px rgba(0,0,0,.1),
     inset 0 1px 0 rgba(255,255,255,.7);
   margin-top:25px;
 }
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:18px;
-  margin-top:18px;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:22px;
+  margin-top:20px;
 }
 
 .card{
-  border-radius:16px;
-  padding:18px 15px;
+  border-radius:20px;
+  padding:22px 18px;
   text-align:center;
-  box-shadow:0 8px 18px rgba(0,0,0,.08);
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
   transition:.25s;
 }
 
 .card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 14px 30px rgba(0,0,0,.12);
+  transform:translateY(-6px);
+  box-shadow:0 18px 40px rgba(0,0,0,.15);
 }
 
 .emoji{
-  font-size:28px;
+  font-size:34px;
 }
 
 .card span{
   display:block;
-  margin-top:6px;
-  font-size:26px;
-  font-weight:700;
+  margin-top:10px;
+  font-size:42px;   /* 🔥 NÚMERO GRANDE AQUI */
+  font-weight:800;
+  line-height:1;
 }
 
 .base{
@@ -102,21 +103,21 @@ button:hover{transform:scale(1.03);}
 
 #grafico{
   display:none;
-  margin-top:35px;
+  margin-top:40px;
 }
 
 .barras{
   display:flex;
-  gap:45px;
+  gap:50px;
   align-items:flex-end;
-  height:220px;
-  margin-top:20px;
+  height:260px;
+  margin-top:25px;
 }
 
 .coluna{
-  width:90px;
+  width:100px;
   background:#e5e7eb;
-  border-radius:14px;
+  border-radius:18px;
   display:flex;
   align-items:flex-end;
   justify-content:center;
@@ -125,19 +126,20 @@ button:hover{transform:scale(1.03);}
 
 .coluna div{
   width:100%;
-  border-radius:14px;
+  border-radius:18px;
   display:flex;
   align-items:flex-end;
   justify-content:center;
   color:#fff;
-  font-weight:700;
-  padding-bottom:6px;
+  font-weight:800;
+  font-size:22px;
+  padding-bottom:8px;
   transition:.4s;
 }
 
 .info{
-  margin-top:15px;
-  font-size:16px;
+  margin-top:18px;
+  font-size:18px;
 }
 </style>
 </head>
