@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
 <style>
-/* ======= SEU CSS ORIGINAL – NÃO ALTERADO ======= */
 body {
   margin:0;
   background:#0b1f2d;
@@ -32,87 +31,227 @@ body {
   gap:20px;
   user-select:none;
 }
-/* resto do CSS mantido */
+h1,h2 {
+  text-align:center;
+  font-weight:900;
+  letter-spacing:4px;
+  margin:0 0 20px 0;
+}
+h1{font-size:36px;}
+h2{font-size:28px;}
+
+.status-box {
+  position:absolute;
+  top:30px;
+  right:30px;
+  border:2px solid #e1e7ee;
+  border-radius:12px;
+  padding:12px 22px;
+  font-weight:600;
+  font-size:16px;
+  text-align:center;
+}
+
+/* --- Tela 1 --- */
+#tela1{display:flex;flex-direction:column;gap:24px;}
+.cards{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+.card{
+  flex:1 1 160px;
+  max-width:180px;
+  border-radius:10px;
+  padding:24px 15px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  color:white;
+  font-weight:700;
+  font-size:18px;
+}
+.card span{display:block;font-size:42px;font-weight:900;margin-top:10px;}
+.ideal{background:#455a64;}
+.falta{background:#d32f2f;}
+.atestado{background:#f57c00;}
+.ferias{background:#388e3c;}
+.card:not(.ideal):not(.falta):not(.atestado):not(.ferias){background:#1976d2;}
+
+/* --- Tela 2 --- */
+#tela2{display:none;flex-direction:column;gap:20px;align-items:center;}
+
+.color-key {
+  display:flex;
+  gap:60px;
+}
+.color-item {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-weight:700;
+}
+.color-square {
+  width:20px;
+  height:20px;
+  border-radius:4px;
+  border:2px solid white;
+}
+.programado{background:#26c6da;}
+.produzido{background:#90caf9;}
+.diferenca{background:#fbc02d;}
+
+.charts-row{
+  display:flex;
+  align-items:center;
+  gap:40px;
+}
+
+#barChartContainer{
+  width:570px;
+  height:320px;
+}
+#donutChartContainer{
+  width:130px;
+  height:130px;
+  position:relative;
+}
+#percentText{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:28px;
+  font-weight:700;
+  color:#1de9b6;
+}
+
+.nav{
+  margin-top:30px;
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+}
+button{
+  background:#26c6da;
+  border:none;
+  border-radius:6px;
+  padding:12px 28px;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-  <!-- HTML ORIGINAL MANTIDO -->
+
+  <!-- TELA 1 -->
+  <div id="tela1">
+    <h2>COLABORADORES</h2>
+    <div class="cards">
+      <div class="card ideal">Ideal<span>30</span></div>
+      <div class="card">Efetivo<span id="cardEfetivo">0</span></div>
+      <div class="card falta">Faltas<span id="cardFalta">0</span></div>
+      <div class="card atestado">Atestados<span id="cardAtestado">0</span></div>
+      <div class="card ferias">Férias<span id="cardFerias">0</span></div>
+    </div>
+    <div class="nav" style="justify-content:center;">
+      <button onclick="avancar()">Avançar ▶</button>
+    </div>
+  </div>
+
+  <!-- TELA 2 -->
+  <div id="tela2">
+    <h1>CAIXAS</h1>
+
+    <div class="status-box">N/D</div>
+
+    <div class="color-key">
+      <div class="color-item"><div class="color-square programado"></div>Programado</div>
+      <div class="color-item"><div class="color-square produzido"></div>Produzido</div>
+      <div class="color-item"><div class="color-square diferenca"></div>Diferença</div>
+    </div>
+
+    <div class="charts-row">
+      <div id="barChartContainer">
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <div id="donutChartContainer">
+        <canvas id="donutChart"></canvas>
+        <div id="percentText">0%</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button onclick="voltar()">◀ Voltar</button>
+      <button onclick="location.href='menu.html'">Menu</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
 const dados = JSON.parse(localStorage.getItem("dadosProducao"));
 if(!dados){
-  alert("Nenhum dado encontrado. Preencha os dados primeiro.");
-  window.location.href="dados.html";
+  alert("Nenhum dado encontrado");
+  location.href="dados.html";
 }
+
+document.getElementById("cardEfetivo").textContent = dados.efetivo;
+document.getElementById("cardFalta").textContent = dados.falta;
+document.getElementById("cardAtestado").textContent = dados.atestado;
+document.getElementById("cardFerias").textContent = dados.ferias;
 
 let barChart, donutChart;
 
-function atualizarGrafico(){
-  const ctxBar = document.getElementById('barChart').getContext('2d');
-  const ctxDonut = document.getElementById('donutChart').getContext('2d');
-  const percentText = document.getElementById('percentText');
+function avancar(){
+  tela1.style.display='none';
+  tela2.style.display='flex';
+  atualizarGrafico();
+}
+function voltar(){
+  tela2.style.display='none';
+  tela1.style.display='flex';
+}
 
+function atualizarGrafico(){
   const programado = dados.programado;
   const produzido = dados.produzido;
   const diferenca = Math.abs(produzido - programado);
-
-  let percentual = programado > 0 ? Math.min(100,(produzido/programado)*100) : 0;
+  const percentual = programado>0 ? (produzido/programado)*100 : 0;
 
   if(barChart) barChart.destroy();
   if(donutChart) donutChart.destroy();
 
-  /* ======= GRÁFICO DE BARRAS – AJUSTE AQUI ======= */
-  barChart = new Chart(ctxBar, {
+  barChart = new Chart(barChart.getContext('2d'),{
     type:'bar',
     data:{
       labels:['','',''],
       datasets:[{
         data:[programado, produzido, diferenca],
         backgroundColor:['#26c6da','#90caf9','#fbc02d'],
-        borderRadius:6,
-        borderSkipped:false
+        borderRadius:6
       }]
     },
     options:{
-      responsive:true,
-      animation:{ duration:800 },
       plugins:{
-        legend:{ display:false },
-        tooltip:{ enabled:true },
-
-        /* 🔥 NUMEROS CENTRALIZADOS NAS BARRAS 🔥 */
+        legend:{display:false},
         datalabels:{
-          display:true,
           color:'#0b1f2d',
-          font:{
-            weight:'bold',
-            size:14
-          },
+          font:{weight:'bold',size:14},
           anchor:'center',
           align:'center',
-          formatter:value => value.toLocaleString('pt-BR')
+          formatter:v=>v.toLocaleString('pt-BR')
         }
       },
       scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{ color:'#e1e7ee', font:{ size:14 }},
-          grid:{ color:'#16405a' }
-        },
-        x:{
-          ticks:{ display:false },
-          grid:{ display:false }
-        }
+        x:{display:false},
+        y:{beginAtZero:true}
       }
     },
     plugins:[ChartDataLabels]
   });
 
-  /* ======= DONUT ORIGINAL – NÃO ALTERADO ======= */
-  donutChart = new Chart(ctxDonut,{
+  donutChart = new Chart(donutChart.getContext('2d'),{
     type:'doughnut',
     data:{
       datasets:[{
@@ -121,13 +260,12 @@ function atualizarGrafico(){
         borderWidth:0
       }]
     },
-    options:{
-      cutout:'75%',
-      plugins:{ legend:{ display:false }, tooltip:{ enabled:false } }
-    }
+    options:{cutout:'75%',plugins:{legend:{display:false}}}
   });
-}
 
+  document.getElementById('percentText').textContent =
+    Math.round(percentual)+'%';
+}
 </script>
 </body>
 </html>
