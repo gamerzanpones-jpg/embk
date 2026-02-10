@@ -2,13 +2,14 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>Dashboard - Caixas</title>
 
 <style>
 :root{
   --azul:#3b82f6;
   --verde:#22c55e;
   --amarelo:#facc15;
+  --vermelho:#ef4444;
   --cinza:#64748b;
 }
 
@@ -40,22 +41,12 @@ button{
   border-radius:10px;
   cursor:pointer;
   font-weight:600;
+  background:var(--cinza);
+  color:#fff;
   transition:.2s;
 }
 
 button:hover{transform:scale(1.05);}
-
-.menu{
-  background:var(--cinza);
-  color:#fff;
-}
-
-.next{
-  background:var(--azul);
-  color:#fff;
-  margin-top:30px;
-  align-self:flex-end;
-}
 
 .card-box{
   background:#fff;
@@ -87,7 +78,9 @@ button:hover{transform:scale(1.05);}
   box-shadow:0 18px 40px rgba(0,0,0,.15);
 }
 
-.emoji{font-size:34px;}
+.emoji{
+  font-size:34px;
+}
 
 .card span{
   display:block;
@@ -97,14 +90,20 @@ button:hover{transform:scale(1.05);}
   line-height:1;
 }
 
-.base{
+.programado{
   background:linear-gradient(135deg,#dbeafe,#bfdbfe);
 }
-.efetivo{
+
+.produzido{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
 }
-.alerta{
+
+.diferenca{
   background:linear-gradient(135deg,#fef9c3,#fde68a);
+}
+
+.porcentagem{
+  background:linear-gradient(135deg,#fee2e2,#fecaca);
 }
 </style>
 </head>
@@ -114,64 +113,62 @@ button:hover{transform:scale(1.05);}
 <div class="container">
 
   <div class="top">
-    <h2>📊 Dashboard</h2>
-    <button class="menu" onclick="location.href='menu.html'">Menu</button>
+    <h2>📦 Dashboard - Caixas</h2>
+    <button onclick="location.href='dashboard.html'">⬅ Voltar</button>
   </div>
 
   <div class="card-box">
-    <h3>👥 Quadro de Colaboradores</h3>
+    <h3>📊 Produção</h3>
 
     <div class="cards">
 
-      <div class="card base">
-        <div class="emoji">🎯</div>
-        Base Ideal
-        <span>30</span>
+      <div class="card programado">
+        <div class="emoji">📋</div>
+        Programado
+        <span id="programado">0</span>
       </div>
 
-      <div class="card efetivo">
-        <div class="emoji">👨‍🏭</div>
-        Efetivo
-        <span id="efetivo">0</span>
+      <div class="card produzido">
+        <div class="emoji">🏭</div>
+        Produzido
+        <span id="produzido">0</span>
       </div>
 
-      <div class="card alerta">
-        <div class="emoji">❌</div>
-        Falta
-        <span id="falta">0</span>
+      <div class="card diferenca">
+        <div class="emoji">➖</div>
+        Diferença
+        <span id="diferenca">0</span>
       </div>
 
-      <div class="card alerta">
-        <div class="emoji">📝</div>
-        Atestado
-        <span id="atestado">0</span>
-      </div>
-
-      <div class="card alerta">
-        <div class="emoji">🏖️</div>
-        Férias
-        <span id="ferias">0</span>
+      <div class="card porcentagem">
+        <div class="emoji">📈</div>
+        Produção
+        <span id="porcentagem">0%</span>
       </div>
 
     </div>
   </div>
-
-  <button class="next" onclick="location.href='dashboard2.html'">
-    ➡ Próximo
-  </button>
 
 </div>
 
 <script>
 window.onload = function(){
   const dados = JSON.parse(localStorage.getItem("dadosSistema")) || {
-    efetivo:0,falta:0,atestado:0,ferias:0
+    programado:0,
+    produzido:0
   };
 
-  document.getElementById("efetivo").textContent = dados.efetivo;
-  document.getElementById("falta").textContent = dados.falta;
-  document.getElementById("atestado").textContent = dados.atestado;
-  document.getElementById("ferias").textContent = dados.ferias;
+  const programado = dados.programado;
+  const produzido  = dados.produzido;
+  const diferenca  = produzido - programado;
+  const porcentagem = programado
+    ? ((produzido / programado) * 100).toFixed(1) + "%"
+    : "0%";
+
+  document.getElementById("programado").textContent  = programado;
+  document.getElementById("produzido").textContent   = produzido;
+  document.getElementById("diferenca").textContent   = diferenca;
+  document.getElementById("porcentagem").textContent = porcentagem;
 }
 </script>
 
