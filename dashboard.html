@@ -11,93 +11,121 @@ body{
   background:#f2f5f9;
   padding:20px;
 }
+.hidden{display:none;}
+.container{
+  max-width:500px;
+  margin:auto;
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
 .card{
   background:#fff;
-  padding:20px;
-  border-radius:12px;
-  max-width:420px;
-  margin:auto;
-  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  padding:15px;
+  border-radius:14px;
+  box-shadow:0 6px 15px rgba(0,0,0,.1);
   text-align:center;
 }
-h2{color:#3b82f6;}
-.ok{color:#22c55e;font-weight:bold;}
-.fail{color:#ef4444;font-weight:bold;}
+.card h3{
+  margin:0;
+  font-size:14px;
+  color:#64748b;
+}
+.card span{
+  font-size:24px;
+  font-weight:bold;
+  color:#3b82f6;
+}
 button{
-  margin-top:15px;
-  padding:10px 20px;
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
   background:#3b82f6;
   color:#fff;
-  border:none;
-  border-radius:8px;
+  font-size:16px;
   cursor:pointer;
 }
-.hidden{display:none;}
-.percent{
-  position:fixed;
-  top:20px;
-  right:20px;
-  background:#fff;
-  padding:10px 15px;
+
+/* gráfico */
+.bar{
+  height:22px;
+  background:#e5e7eb;
   border-radius:10px;
-  box-shadow:0 6px 15px rgba(0,0,0,.1);
+  overflow:hidden;
+  margin-top:10px;
 }
+.fill{
+  height:100%;
+}
+.prog{background:#ec4899;}
+.prod{background:#22c55e;}
 </style>
 </head>
 
 <body>
 
-<div class="percent" id="percentual"></div>
+<div class="container">
 
-<div class="card" id="cardColab">
-  <h2>👥 Quadro de Colaboradores</h2>
-  <p>Efetivo: <span id="ef"></span></p>
-  <p>Falta: <span id="fa"></span></p>
-  <p>Atestado: <span id="at"></span></p>
-  <p>Férias: <span id="fe"></span></p>
-  <p id="status"></p>
+  <!-- TELA 1 -->
+  <div id="telaColab">
+    <h2>👥 Quadro de Colaboradores</h2>
 
-  <button onclick="proximo()">Próximo</button>
-</div>
+    <div class="cards">
+      <div class="card"><h3>Base Ideal</h3><span>30</span></div>
+      <div class="card"><h3>Efetivo</h3><span id="ef"></span></div>
+      <div class="card"><h3>Falta</h3><span id="fa"></span></div>
+      <div class="card"><h3>Atestado</h3><span id="at"></span></div>
+      <div class="card"><h3>Férias</h3><span id="fe"></span></div>
+    </div>
 
-<div class="card hidden" id="cardCaixas">
-  <h2>📦 Produção de Caixas</h2>
-  <p>Programado: <span id="cp"></span></p>
-  <p>Produzido: <span id="cr"></span></p>
-  <p>Diferença: <span id="dif"></span></p>
+    <button onclick="proximo()">Próximo</button>
+  </div>
 
-  <button onclick="voltar()">Voltar</button>
+  <!-- TELA 2 -->
+  <div id="telaCaixas" class="hidden">
+    <h2>📦 Caixas</h2>
+
+    <p>Programado: <strong id="cp"></strong></p>
+    <div class="bar"><div id="bprog" class="fill prog"></div></div>
+
+    <p>Produzido: <strong id="cr"></strong></p>
+    <div class="bar"><div id="bprod" class="fill prod"></div></div>
+
+    <p>Diferença: <strong id="dif"></strong></p>
+
+    <button onclick="menu()">Menu</button>
+  </div>
+
 </div>
 
 <script>
-const dados = JSON.parse(localStorage.getItem("dadosDashboard"))
-
-const totalEfetivo = dados.efetivo
-const bateuBase = totalEfetivo >= dados.baseIdeal
+const dados = JSON.parse(localStorage.getItem("dadosSistema"))
 
 ef.textContent = dados.efetivo
 fa.textContent = dados.falta
 at.textContent = dados.atestado
 fe.textContent = dados.ferias
 
-status.innerHTML = bateuBase
-  ? "<span class='ok'>Base atingida</span>"
-  : "<span class='fail'>Base NÃO atingida</span>"
+cp.textContent = dados.programado
+cr.textContent = dados.produzido
+dif.textContent = dados.programado - dados.produzido
 
-cp.textContent = dados.caixasProgramadas
-cr.textContent = dados.caixasProduzidas
-dif.textContent = dados.caixasProduzidas - dados.caixasProgramadas
-
-const perc = Math.round((dados.caixasProduzidas / dados.caixasProgramadas) * 100)
-percentual.textContent = perc + "% produzido"
+bprog.style.width = "100%"
+bprod.style.width = Math.min(
+  (dados.produzido / dados.programado) * 100, 100
+) + "%"
 
 function proximo(){
-  cardColab.classList.add("hidden")
-  cardCaixas.classList.remove("hidden")
+  telaColab.classList.add("hidden")
+  telaCaixas.classList.remove("hidden")
 }
-function voltar(){
-  cardCaixas.classList.add("hidden")
-  cardColab.classList.remove("hidden")
+
+function menu(){
+  window.location.href = "dados2.html"
 }
 </script>
 
