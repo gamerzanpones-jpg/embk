@@ -39,37 +39,38 @@ h1{
   background:#fff;
   border-radius:14px;
   box-shadow:0 8px 20px rgba(0,0,0,.08);
-  overflow:hidden; /* MUITO IMPORTANTE */
+  padding:14px;
+  text-align:center;
 }
 
-/* TOPO FIXO */
-.card-header{
-  background:linear-gradient(135deg, var(--rosa), var(--azul));
-  color:#fff;
-  text-align:center;
-  padding:12px 0;
-  font-size:22px;
+/* NUMERO DO DIA */
+.dia{
+  font-size:28px;
   font-weight:bold;
+  color:var(--rosa);
+  margin-bottom:10px;
 }
 
-/* CONTEÚDO */
-.card-body{
-  padding:12px;
-  text-align:center;
-}
-
+/* ITENS */
 .item{
   margin:6px 0;
   font-size:14px;
   color:var(--cinza);
 }
 
-.ok{ color:var(--verde); font-weight:bold; }
-.fail{ color:var(--vermelho); font-weight:bold; }
+.ok{
+  color:var(--verde);
+  font-weight:bold;
+}
+
+.fail{
+  color:var(--vermelho);
+  font-weight:bold;
+}
 
 @media(max-width:600px){
-  .card-header{
-    font-size:20px;
+  .dia{
+    font-size:24px;
   }
 }
 </style>
@@ -96,16 +97,11 @@ dados.forEach(reg => {
   card.className = "card"
 
   card.innerHTML = `
-    <div class="card-header">
-      Dia ${reg.dia}
-    </div>
-
-    <div class="card-body">
-      <div class="item">Base: ${reg.programado}</div>
-      <div class="item ok">Produzido: ${reg.produzido}</div>
-      <div class="item ${falta > 0 ? 'fail' : 'ok'}">
-        Falta: ${falta > 0 ? falta : 0}
-      </div>
+    <div class="dia">${reg.dia}</div>
+    <div class="item">Base: ${reg.programado}</div>
+    <div class="item ok">Produzido: ${reg.produzido}</div>
+    <div class="item ${falta > 0 ? 'fail' : 'ok'}">
+      Falta: ${falta > 0 ? falta : 0}
     </div>
   `
 
