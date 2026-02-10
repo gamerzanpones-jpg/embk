@@ -109,6 +109,15 @@ h2{font-size:28px;}
 #donutChartContainer{position:relative;width:130px;height:130px;}
 #donutChart{width:130px !important;height:130px !important;}
 #percentText{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:700;color:#1de9b6;pointer-events:none;user-select:none;}
+#barChartValues {
+  display:flex;
+  justify-content:space-between;
+  width:570px;
+  margin-top:12px;
+  color:#e1e7ee;
+  font-weight:700;
+  font-size:16px;
+}
 .nav{margin-top:30px;display:flex;justify-content:space-between;}
 button{
   background:#26c6da;
@@ -159,7 +168,15 @@ button:hover{background:#00acc1;color:#fff;}
     </div>
 
     <div class="charts-row">
-      <canvas id="barChart"></canvas>
+      <div>
+        <canvas id="barChart"></canvas>
+        <!-- Números abaixo do gráfico -->
+        <div id="barChartValues">
+          <span id="valProgramado">0</span>
+          <span id="valProduzido">0</span>
+          <span id="valDiferenca">0</span>
+        </div>
+      </div>
       <div id="donutChartContainer">
         <canvas id="donutChart"></canvas>
         <div id="percentText">0%</div>
@@ -204,7 +221,7 @@ function atualizarGrafico(){
   if(barChart) barChart.destroy();
   if(donutChart) donutChart.destroy();
 
-  // --- Gráfico de Barras sem números ---
+  // --- Gráfico de Barras sem números dentro ---
   barChart=new Chart(ctxBar,{
     type:'bar',
     data:{
@@ -222,7 +239,7 @@ function atualizarGrafico(){
       plugins:{ 
         legend:{ display:false }, 
         tooltip:{ enabled:true }, 
-        datalabels:{ display:false } // <-- números desativados
+        datalabels:{ display:false } // números internos desativados
       },
       scales:{
         y:{ beginAtZero:true, ticks:{ color:'#e1e7ee', font:{ size:14 } }, grid:{ color:'#16405a' } },
@@ -231,6 +248,11 @@ function atualizarGrafico(){
     },
     plugins:[ChartDataLabels]
   });
+
+  // --- Atualizar números abaixo do gráfico ---
+  document.getElementById('valProgramado').textContent = programado.toLocaleString('pt-BR');
+  document.getElementById('valProduzido').textContent = produzido.toLocaleString('pt-BR');
+  document.getElementById('valDiferenca').textContent = diferenca.toLocaleString('pt-BR');
 
   // --- Gráfico de Rosca ---
   donutChart=new Chart(ctxDonut,{
