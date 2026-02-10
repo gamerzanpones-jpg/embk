@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu - Dashboard Produção</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-box {
+      background: white;
+      padding: 30px;
+      width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #11998e;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #11998e;
+      border: none;
+      color: white;
+      font-size: 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0c7b6f;
+    }
+
+    .footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="menu-box">
+    <h2>Menu Principal</h2>
+
+    <button onclick="location.href='dados.html'">
+      Inserir Dados
+    </button>
+
+    <button onclick="location.href='dashboard.html'">
+      Dashboard
+    </button>
+
+    <div class="footer">
+      Dashboard de Produção
+    </div>
+  </div>
+
+</body>
+</html>
