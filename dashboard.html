@@ -105,22 +105,31 @@ h2{font-size:28px;}
 .diferenca{background:#fbc02d;}
 
 .charts-row{display:flex;align-items:center;gap:40px;width:100%;justify-content:flex-start;}
-#barChart{width:570px !important;height:320px !important;position:relative;}
+#barChartContainer {
+  position: relative;
+  width:570px;
+  height:320px;
+}
+#barChart{width:100% !important;height:100% !important;}
 #donutChartContainer{position:relative;width:130px;height:130px;}
 #donutChart{width:130px !important;height:130px !important;}
 #percentText{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:700;color:#1de9b6;pointer-events:none;user-select:none;}
 
 /* Números abaixo das barras, centralizados com a barra */
 #barChartValues {
+  position:absolute;
+  bottom:-28px; /* distância abaixo do gráfico */
+  left:0;
+  width:100%;
   display:flex;
   justify-content:space-between;
-  width:570px;
-  margin-top:12px;
+  padding:0 24px; /* espaço nas laterais para alinhar barras */
   color:#e1e7ee;
   font-weight:700;
   font-size:16px;
-  padding: 0 6px; /* para alinhar melhor com borda das barras */
+  pointer-events:none;
 }
+
 .nav{margin-top:30px;display:flex;justify-content:space-between;}
 button{
   background:#26c6da;
@@ -171,9 +180,8 @@ button:hover{background:#00acc1;color:#fff;}
     </div>
 
     <div class="charts-row">
-      <div>
+      <div id="barChartContainer">
         <canvas id="barChart"></canvas>
-        <!-- Números das caixas abaixo das barras -->
         <div id="barChartValues">
           <span id="valProgramado">0</span>
           <span id="valProduzido">0</span>
@@ -228,7 +236,7 @@ function atualizarGrafico(){
   barChart = new Chart(ctxBar, {
     type:'bar',
     data:{
-      labels:['','',''], // deixamos labels vazias
+      labels:['','',''], // sem nomes
       datasets:[{
         data:[programado, produzido, diferenca],
         backgroundColor:['#26c6da','#90caf9','#fbc02d'],
@@ -242,17 +250,17 @@ function atualizarGrafico(){
       plugins:{ 
         legend:{ display:false }, 
         tooltip:{ enabled:true }, 
-        datalabels:{ display:false } // números internos desativados
+        datalabels:{ display:false }
       },
       scales:{
         y:{ beginAtZero:true, ticks:{ color:'#e1e7ee', font:{ size:14 } }, grid:{ color:'#16405a' } },
-        x:{ ticks:{ display:false }, grid:{ display:false } } // x sem labels
+        x:{ ticks:{ display:false }, grid:{ display:false } }
       }
     },
     plugins:[ChartDataLabels]
   });
 
-  // --- Atualizar apenas os números das caixas abaixo das barras ---
+  // --- Atualizar números abaixo das barras ---
   document.getElementById('valProgramado').textContent = programado.toLocaleString('pt-BR');
   document.getElementById('valProduzido').textContent = produzido.toLocaleString('pt-BR');
   document.getElementById('valDiferenca').textContent = diferenca.toLocaleString('pt-BR');
