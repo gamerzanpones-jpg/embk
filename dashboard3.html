@@ -126,10 +126,11 @@ if(!dados){
   document.getElementById("porPessoa").innerText = 0;
 }else{
   const produzido = Number(dados.produzido) || 0;
-  const efetivo  = Number(dados.efetivo) || 0;
+  const efetivo   = Number(dados.efetivo) || 0;
 
+  // ARREDONDAMENTO NORMAL
   const caixasPorPessoa = efetivo > 0
-    ? (produzido / efetivo).toFixed(1)
+    ? Math.round(produzido / efetivo)
     : 0;
 
   document.getElementById("produzido").innerText = produzido;
