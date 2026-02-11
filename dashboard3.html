@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 Caixas por Pessoas</title>
+<title>📊 Caixas por Pessoa</title>
 
 <style>
 :root{
@@ -114,22 +114,28 @@ header{
 </div>
 
 <script>
-/* 
-  Esses valores são os mesmos salvos no dados.html
-  NÃO muda nada lá, só lê
+/*
+  Lê os dados salvos no dados.html
+  localStorage → dadosSistema
 */
-const produzido = Number(localStorage.getItem("produzido")) || 0;
-const efetivos = Number(localStorage.getItem("efetivos")) || 0;
+const dados = JSON.parse(localStorage.getItem("dadosSistema"));
 
-/* cálculo: produzido ÷ efetivos */
-const caixasPorPessoa = efetivos > 0
-  ? (produzido / efetivos).toFixed(1)
-  : 0;
+if(!dados){
+  document.getElementById("produzido").innerText = 0;
+  document.getElementById("efetivos").innerText = 0;
+  document.getElementById("porPessoa").innerText = 0;
+}else{
+  const produzido = Number(dados.produzido) || 0;
+  const efetivos  = Number(dados.efetivos) || 0;
 
-/* exibe na tela */
-document.getElementById("produzido").innerText = produzido;
-document.getElementById("efetivos").innerText = efetivos;
-document.getElementById("porPessoa").innerText = caixasPorPessoa;
+  const caixasPorPessoa = efetivos > 0
+    ? (produzido / efetivos).toFixed(1)
+    : 0;
+
+  document.getElementById("produzido").innerText = produzido;
+  document.getElementById("efetivos").innerText  = efetivos;
+  document.getElementById("porPessoa").innerText = caixasPorPessoa;
+}
 </script>
 
 </body>
