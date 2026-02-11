@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 Caixas por Pessoas</title>
+
+<style>
+:root{
+  --azul:#3b82f6;
+  --rosa:#ec4899;
+  --verde:#22c55e;
+  --cinza:#f1f5f9;
+}
+
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:var(--cinza);
+}
+
+header{
+  background:linear-gradient(135deg, var(--azul), var(--rosa));
+  color:#fff;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 6px 15px rgba(0,0,0,.2);
+}
+
+.cards{
+  padding:40px 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:25px;
+}
+
+.card{
+  background:#fff;
+  padding:35px 20px;
+  border-radius:22px;
+  text-align:center;
+  box-shadow:0 18px 45px rgba(0,0,0,.15);
+  transition:transform .25s ease;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+}
+
+.card h2{
+  margin-bottom:15px;
+  font-size:22px;
+}
+
+.numero{
+  font-size:58px;
+  font-weight:800;
+}
+
+.azul{ color:var(--azul); }
+.rosa{ color:var(--rosa); }
+.verde{ color:var(--verde); }
+
+.voltar{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.voltar a{
+  display:inline-block;
+  padding:14px 28px;
+  background:var(--azul);
+  color:#fff;
+  border-radius:14px;
+  text-decoration:none;
+  font-size:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.voltar a:hover{
+  opacity:.9;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📊 CAIXAS POR PESSOA</h1>
+  <p>Produzido ÷ Efetivos</p>
+</header>
+
+<section class="cards">
+
+  <div class="card">
+    <h2>📦 Produzido</h2>
+    <div class="numero azul" id="produzido">0</div>
+  </div>
+
+  <div class="card">
+    <h2>👥 Efetivos</h2>
+    <div class="numero rosa" id="efetivos">0</div>
+  </div>
+
+  <div class="card">
+    <h2>🧮 Caixas por Pessoa</h2>
+    <div class="numero verde" id="porPessoa">0</div>
+  </div>
+
+</section>
+
+<div class="voltar">
+  <a href="./dados.html">⬅ Voltar para Dados</a>
+</div>
+
+<script>
+/* 
+  Esses valores são os mesmos salvos no dados.html
+  NÃO muda nada lá, só lê
+*/
+const produzido = Number(localStorage.getItem("produzido")) || 0;
+const efetivos = Number(localStorage.getItem("efetivos")) || 0;
+
+/* cálculo: produzido ÷ efetivos */
+const caixasPorPessoa = efetivos > 0
+  ? (produzido / efetivos).toFixed(1)
+  : 0;
+
+/* exibe na tela */
+document.getElementById("produzido").innerText = produzido;
+document.getElementById("efetivos").innerText = efetivos;
+document.getElementById("porPessoa").innerText = caixasPorPessoa;
+</script>
+
+</body>
+</html>
