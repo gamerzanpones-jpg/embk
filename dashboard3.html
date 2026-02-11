@@ -87,7 +87,7 @@ header{
 
 <header>
   <h1>📊 CAIXAS POR PESSOA</h1>
-  <p>Produzido ÷ Efetivos</p>
+  <p>Produzido ÷ Efetivo</p>
 </header>
 
 <section class="cards">
@@ -98,8 +98,8 @@ header{
   </div>
 
   <div class="card">
-    <h2>👥 Efetivos</h2>
-    <div class="numero rosa" id="efetivos">0</div>
+    <h2>👥 Efetivo</h2>
+    <div class="numero rosa" id="efetivo">0</div>
   </div>
 
   <div class="card">
@@ -122,18 +122,18 @@ const dados = JSON.parse(localStorage.getItem("dadosSistema"));
 
 if(!dados){
   document.getElementById("produzido").innerText = 0;
-  document.getElementById("efetivos").innerText = 0;
+  document.getElementById("efetivo").innerText = 0;
   document.getElementById("porPessoa").innerText = 0;
 }else{
   const produzido = Number(dados.produzido) || 0;
-  const efetivos  = Number(dados.efetivos) || 0;
+  const efetivo  = Number(dados.efetivo) || 0;
 
-  const caixasPorPessoa = efetivos > 0
-    ? (produzido / efetivos).toFixed(1)
+  const caixasPorPessoa = efetivo > 0
+    ? (produzido / efetivo).toFixed(1)
     : 0;
 
   document.getElementById("produzido").innerText = produzido;
-  document.getElementById("efetivos").innerText  = efetivos;
+  document.getElementById("efetivo").innerText  = efetivo;
   document.getElementById("porPessoa").innerText = caixasPorPessoa;
 }
 </script>
